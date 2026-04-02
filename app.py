@@ -268,7 +268,13 @@ table_cols = [
     "autor", "year", "salario_bruto_anual", "salario_bruto_2026",
     "ciudad", "modalidad", "pais", "experiencia_anos", "tecnologia",
 ]
-df_table = df.select(table_cols).sort("salario_bruto_2026", descending=True)
+df_table = (
+    df.select(table_cols)
+    .sort("salario_bruto_2026", descending=True)
+    .with_columns(
+        pl.col(c).fill_null("") for c in ("ciudad", "modalidad", "pais", "tecnologia")
+    )
+)
 
 st.dataframe(
     df_table.to_pandas(),
