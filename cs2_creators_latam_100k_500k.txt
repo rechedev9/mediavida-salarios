@@ -1,0 +1,37 @@
+CS2 Creadores LATAM 100k-500k — Combinado 3 Plataformas
+=========================================================
+Fecha: 2026-04-02
+Región: América Latina (excluye España)
+
+RESUMEN
+-------
+YouTube  :  2 creadores
+Twitch   :  4 streamers
+Instagram:  0 cuentas en este rango
+TOTAL    :  6 entradas (6 únicos — todos argentinos)
+
+YOUTUBE (2)
+-----------
+Dareh              235,000  https://www.youtube.com/@Dareh
+Serious            140,000  https://www.youtube.com/@SeriousCS
+
+TWITCH (4)
+----------
+strakatv           271,951  https://www.twitch.tv/strakatv
+forg1              251,009  https://www.twitch.tv/forg1
+safiro01           173,954  https://www.twitch.tv/safiro01
+elmorocho7         111,577  https://www.twitch.tv/elmorocho7
+
+INSTAGRAM (0)
+-------------
+Sin cuentas LATAM CS2 encontradas en el rango 100k-500k.
+La más grande encontrada: gordoreally_ con 69K (por debajo del umbral).
+
+NOTAS
+-----
+- Todos los creadores LATAM CS2 en 100k-500k son argentinos.
+- El rango LATAM 100k-500k en YouTube es escaso: SrAmilcar queda en 87.5K (muy cerca).
+- Twitch es la plataforma con mayor concentración LATAM en este rango.
+- España domina este rango en todas las plataformas (starwraith 398K, x6flipin/FlipiN 396K,
+  Blackelespanolito 488K, vLADOPARD 354K, SirMaza 287K, Dareh* excluido de España por ser LATAM).
+- Para rango completo 2k-500k LATAM, ver: cs2_creators_latam_2k_500k.txt
