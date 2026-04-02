@@ -194,3 +194,54 @@ scrapper/
 2. **Cuenta GitHub:** ¿Quieres crear el repo bajo tu cuenta personal o una organización?
 
 3. **Texto completo en la tabla:** ¿Incluir el texto del post en la tabla interactiva (permite al lector ver el contexto original) o excluirlo (más limpio, menos ruido)?
+
+---
+
+---
+
+# Roadmap: Creadores CS2 hispanos 20k-100k seguidores
+
+## Objetivo
+
+Encontrar creadores de contenido de CS2 de habla hispana con entre 20,000 y 100,000 seguidores/suscriptores en Instagram, Twitch y YouTube.
+Rango anterior completado: 2k-20k (18 IG + 8 Twitch + 13 YT = 39 total).
+
+## Estado actual
+
+| Plataforma | Estado | Archivo de output |
+|---|---|---|
+| Instagram | ⏳ pendiente | `cs2_instagram_20k_100k.json` |
+| Twitch | ⏳ pendiente | `cs2_twitch_20k_100k.json` |
+| YouTube | ⏳ pendiente | `cs2_youtube_20k_100k.json` |
+
+## Estrategia por plataforma
+
+### Instagram
+- Google dorking via Chrome (`site:instagram.com "cs2" español` etc.)
+- Extraer usernames de los snippets de Google
+- Visitar cada perfil, leer meta description para obtener seguidores
+- Filtrar 20k-100k, descartar organizaciones/tiendas/compilaciones
+
+### Twitch
+- TwitchTracker ranking (`twitchtracker.com/channels/ranking/spanish?game=Counter-Strike+2`)
+  - Para 20k-100k estarán en páginas anteriores (más arriba en el ranking) vs. las páginas 10-13 del rango 2k-20k
+- Twitch GQL API (`gql.twitch.tv/gql`, client-id: `kimne78kx3ncx6brgo4mv6wki5h1ko`) para verificar followers y último juego
+- Filtrar variety streamers (último juego: Roblox, slots, etc.)
+
+### YouTube
+- YouTube search con filtro de canales (`sp=EgIQAg%3D%3D`)
+- YouTube internal API (`/youtubei/v1/search`) para ejecutar múltiples queries sin navegar
+- Filtrar no-hispanos, organizaciones, canales de cheats, compilaciones
+
+## Archivos de output esperados
+
+```
+cs2_instagram_20k_100k.json / .txt / .csv
+cs2_twitch_20k_100k.json / .txt / .csv
+cs2_youtube_20k_100k.json / .txt / .csv
+cs2_creators_combined_20k_100k.txt / .csv
+```
+
+## Log de progreso
+
+_(vacío — pendiente inicio)_
