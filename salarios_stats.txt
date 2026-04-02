@@ -1,0 +1,103 @@
+============================================================
+TABLA SALARIAL PROGRAMADORES ESPAÑA — MediaVida
+Fuente: mediavida.com/foro thread #596068  |  Ref: €2026
+============================================================
+
+N (respuestas válidas con dato, deduplicadas por usuario): 231
+Período cubierto: 2017-10-23 → 2026-04-01
+
+--- Salario Bruto Anual ajustado a €2026 (IPC España) ---
+  Mediana:      38,711 €
+  Media:        48,064 €
+  P10:          20,656 €
+  P25:          28,933 €
+  P75:          57,514 €
+  P90:          88,483 €
+  Min:           8,000 €
+  Max:         174,997 €
+  Desv.std:     30,233 €
+
+--- Salario Bruto Anual ORIGINAL (sin ajuste inflación) ---
+  Mediana:      35,000 €
+  Media:        42,569 €
+  P25:          25,000 €
+  P75:          50,000 €
+
+--- Distribución por año de post ---
+  Año        N  Mediana orig.€  Mediana €2026
+  2017      49          28,000         39,812
+  2018       2          34,500         47,709
+  2019       5          28,000         38,413
+  2020       5          25,000         34,493
+  2021       6          45,000         54,450
+  2022      50          35,500         39,264
+  2023      28          39,000         41,467
+  2024      34          39,000         40,299
+  2025      29          35,000         35,439
+  2026      23          35,000         35,000
+
+--- Top ciudades (N ≥ 3) ---
+  Ciudad                            N  Mediana €2026
+  EEUU                              3        139,496
+  UK                                4         87,407
+  Londres                           3         81,117
+  Zaragoza                          3         66,000
+  Barcelona                        29         44,657
+  Madrid                           37         42,656
+  Remoto                           49         41,332
+  Murcia                            3         40,404
+  Alicante                          4         37,247
+  Sevilla                           7         36,151
+  Valencia                         10         35,854
+  Las Palmas                        4         31,589
+  Málaga                            7         29,863
+  Palma de Mallorca                 6         28,011
+  Salamanca                         3         19,906
+
+--- Transparencia del dato ---
+  Bruto explícito:      23 (10.0%)
+  Neto explícito:        6 (2.6%)
+  No especificado:     202 (87.4%)  ← asumido bruto
+  Con conversión n→b:    6
+
+  Frecuencia explícita anual:     27
+  Frecuencia explícita mensual:    6
+  Frecuencia inferida:           198
+
+  Moneda EUR:   225
+  Moneda CAD:     1
+  Moneda GBP:     5
+  Moneda USD:     0
+
+--- Modalidad ---
+  Presencial         3 (1.3%)
+  Híbrido           13 (5.6%)
+  Remoto            73 (31.6%)
+  No indicado      142 (61.5%)
+
+--- País ---
+  España           183 (79.2%)
+  Extranjero        25 (10.8%)
+
+--- Top 20 salarios más altos (€2026) ---
+  Usuario                Año Ciudad                Bruto orig.€      €2026
+  LordDeath             2022 UK                         158,220    174,997
+  isvidal               2025 Remoto                     170,000    172,134
+  Zoko                  2022 Zúrich                     135,000    149,314
+  ousean                2023 Riyadh                     140,000    148,858
+  squ4r3                2024 EEUU                       135,000    139,496
+  aren-pulid0           2024 EEUU                       135,000    139,496
+  robb                  2023 Londres                    130,000    138,225
+  Bathory2              2017 -                           96,000    136,498
+  Khanser               2017 Manchester                  85,575    121,675
+  Lecherito             2024 Remoto                     110,000    113,664
+  -rabocop-             2023 Ourense                    105,000    111,643
+  MartiONE              2025 Alicante                   110,000    111,381
+  Troyer                2020 Alemania                    78,000    107,617
+  bornex                2022 Remoto                      95,000    105,073
+  zoeshadow             2024 Madrid                     101,476    104,856
+  MalGanis              2021 Remoto                      84,000    101,640
+  microburst            2025 Lucerna                    100,000    101,255
+  Geekalvaro            2025 Madrid                     100,000    101,255
+  Charlies              2017 Barcelona                   70,000     99,530
+  Tig                   2017 Zaragoza                    70,000     99,530

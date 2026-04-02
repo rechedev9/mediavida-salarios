@@ -1,0 +1,196 @@
+# Roadmap: Tabla salarial de programadores en España (MediaVida)
+
+## Objective
+
+Scrapear el hilo de MediaVida (88 páginas), producir una tabla salarial limpia con ajuste por inflación, y publicar los resultados como un dashboard Streamlit desplegado en Streamlit Community Cloud con URL compartible en el foro.
+
+---
+
+## Current State
+
+### Pipeline de datos (COMPLETADA)
+
+| Script | Función | Estado |
+|---|---|---|
+| `scrape_mediavida.py` | Descarga 88 páginas con httpx+brotli, HTML cacheado en `raw_html/` | ✅ |
+| `extract_salary.py` | Regex con filtros de tercera persona, dedup template-first por usuario | ✅ |
+| `build_table.py` | Armoniza bruto/neto/mensual→anual, IPC España, normaliza ciudades, exporta CSV/Parquet/stats | ✅ |
+
+### Datos producidos
+
+- `posts_raw.json` — 2602 posts, 416 autores (Oct 2017 – Abr 2026)
+- `salarios_tabla.csv` / `.parquet` — **231 programadores** con dato válido
+- Mediana bruto anual €2026: **38.711€** | P25: 28.933€ | P75: 57.514€
+- Ciudades normalizadas: 118 valores raw → ~30 canónicos (Madrid 37, Remoto 49, Barcelona 29, Valencia 10…)
+- Columnas derivadas: `ciudad` (canónica), `ciudad_raw`, `modalidad` (Presencial/Híbrido/Remoto), `pais` (España 79% / Extranjero 11%)
+- Distribución por ciudad, año, experiencia, tecnología disponible
+
+### Lo que falta
+
+- No existe repositorio Git aún
+- No existe app Streamlit
+- No hay `requirements.txt` ni configuración de deploy
+
+---
+
+## Constraints
+
+- **Streamlit Community Cloud:** requiere repo público en GitHub con `requirements.txt` y un `.py` de entrada.
+- **Tamaño de datos:** `salarios_tabla.parquet` es pequeño (~200 filas), se puede embeber en el repo directamente. No necesita base de datos.
+- **Sin secretos:** no hay API keys ni tokens necesarios para la app (solo lee datos estáticos).
+- El `raw_html/` y otros artefactos pesados NO deben ir al repo público.
+- Los datos del foro son públicos (MediaVida es de acceso libre), pero la app debe citar la fuente.
+
+---
+
+## Workstreams
+
+1. **W8 — Dashboard Streamlit:** Crear `app.py` con visualizaciones interactivas.
+2. **W9 — Repo GitHub:** Inicializar repo, `.gitignore`, `requirements.txt`, push.
+3. **W10 — Deploy Streamlit Cloud:** Conectar repo → Streamlit Community Cloud → URL pública.
+
+---
+
+## Step-by-Step Plan
+
+### Fase 8: Dashboard Streamlit (W8)
+
+**Script:** `app.py`
+
+Visualizaciones previstas:
+
+1. **Header** — Título, fuente (link al hilo de MV), N, período, metodología breve
+2. **KPIs** — Mediana, media, P25, P75 en tarjetas tipo `st.metric`
+3. **Histograma** — Distribución de salario bruto anual €2026 (Plotly)
+4. **Boxplot por ciudad** — Top 8-10 ciudades con N≥3 (Plotly)
+5. **Evolución temporal** — Mediana por año de post, original vs. €2026 (Plotly)
+6. **Scatter experiencia vs. salario** — Solo rows con `experiencia_anos` no nulo (Plotly)
+7. **Tabla interactiva** — DataFrame filtrable con `st.dataframe` (sin texto completo del post)
+8. **Sección de transparencia** — % bruto/neto/asumido, % frecuencia inferida, fuente IPC
+
+**Filtros laterales (sidebar):**
+- Rango de salario (slider)
+- Ciudad (multiselect — usa columna `ciudad` normalizada)
+- Año de post (range slider)
+- Solo España / incluir extranjero (toggle — usa columna `pais`)
+- Modalidad (multiselect — usa columna `modalidad`: Presencial/Híbrido/Remoto)
+
+**Dependencias adicionales:**
+```
+streamlit
+plotly
+polars
+```
+
+> **Checkpoint:** Probar `streamlit run app.py` en local antes de pushear.
+
+---
+
+### Fase 9: Repo GitHub (W9)
+
+1. **Inicializar git** en `/Users/reche/projects/scrapper`
+2. **`.gitignore`** — excluir:
+   ```
+   venv/
+   raw_html/
+   __pycache__/
+   *.pyc
+   posts_raw.json
+   posts_with_salary.parquet
+   salarios_dedup.parquet
+   extraction_review.txt
+   # Artefactos del proyecto CS2 anterior
+   cs2_*
+   find_creators.py
+   log.md
+   roadmap_youtube.md
+   ```
+3. **`requirements.txt`**:
+   ```
+   streamlit>=1.35
+   plotly>=5.20
+   polars>=1.0
+   ```
+4. **Archivos que SÍ van al repo:**
+   ```
+   app.py                  ← dashboard
+   salarios_tabla.parquet  ← datos finales (pequeño, ~50KB)
+   salarios_stats.txt      ← estadísticas texto plano
+   requirements.txt        ← deps para Streamlit Cloud
+   .gitignore
+   roadmap.md              ← este archivo
+   README.md               ← opcional, breve
+   ```
+5. **Archivos de pipeline (opcionales, para reproducibilidad):**
+   ```
+   scrape_mediavida.py
+   extract_salary.py
+   build_table.py
+   ```
+   Incluirlos permite a cualquiera re-ejecutar el scraping. No son necesarios para la app.
+
+6. **Crear repo** en GitHub (nombre sugerido: `mediavida-salarios`)
+7. **Push** rama `main`
+
+> **Checkpoint:** Confirmar que el repo contiene `app.py`, `requirements.txt`, `salarios_tabla.parquet`, y que NO contiene `raw_html/`, `venv/`, ni datos intermedios pesados.
+
+---
+
+### Fase 10: Deploy Streamlit Cloud (W10)
+
+1. Ir a [share.streamlit.io](https://share.streamlit.io)
+2. Conectar cuenta GitHub (el usuario debe hacer esto manualmente — requiere OAuth)
+3. Seleccionar repo `mediavida-salarios`, rama `main`, archivo `app.py`
+4. Deploy automático — URL generada tipo `mediavida-salarios.streamlit.app`
+5. Pegar URL en el hilo de MediaVida
+
+> **Nota:** Streamlit Cloud hace cold start de ~30s si la app lleva rato sin visitas. Es normal.
+
+---
+
+## Files Likely Affected / Created
+
+```
+scrapper/
+├── app.py                      # NUEVO — Streamlit dashboard
+├── requirements.txt            # NUEVO — deps para Streamlit Cloud
+├── .gitignore                  # NUEVO — excluye venv, raw_html, datos intermedios
+├── salarios_tabla.parquet      # EXISTENTE — datos finales para la app
+├── salarios_stats.txt          # EXISTENTE — estadísticas texto plano
+├── scrape_mediavida.py         # EXISTENTE — pipeline de scraping
+├── extract_salary.py           # EXISTENTE — pipeline de extracción
+├── build_table.py              # EXISTENTE — pipeline de armonización
+└── roadmap.md                  # EXISTENTE — este archivo (actualizado)
+```
+
+---
+
+## Risks
+
+| Riesgo | Probabilidad | Mitigación |
+|--------|-------------|------------|
+| Streamlit Cloud duerme la app por inactividad | Segura | Documentar en el post del foro que puede tardar ~30s en cargar |
+| Repo público expone datos de usuarios del foro | Baja | Los datos de MV son públicos; la app solo muestra nick, año, ciudad, salario — no texto completo |
+| El parquet no se lee bien en Streamlit Cloud | Muy baja | Polars lee parquet sin problemas; testado localmente |
+| La app se rompe si Streamlit cambia API | Baja | Fijar versión mínima en `requirements.txt` |
+
+---
+
+## Verification
+
+- [ ] `streamlit run app.py` funciona en local con todos los gráficos
+- [ ] Filtros de sidebar funcionan correctamente
+- [ ] No se expone texto completo de los posts (privacidad de contexto)
+- [ ] Repo en GitHub no contiene `venv/`, `raw_html/`, ni datos intermedios
+- [ ] URL de Streamlit Cloud carga correctamente tras deploy
+- [ ] Gráficos son legibles en móvil (el foro se lee mucho desde móvil)
+
+---
+
+## Open Questions
+
+1. **Nombre del repo:** ¿`mediavida-salarios` o prefieres otro nombre?
+
+2. **Cuenta GitHub:** ¿Quieres crear el repo bajo tu cuenta personal o una organización?
+
+3. **Texto completo en la tabla:** ¿Incluir el texto del post en la tabla interactiva (permite al lector ver el contexto original) o excluirlo (más limpio, menos ruido)?

@@ -1,0 +1,17 @@
+venv/
+raw_html/
+__pycache__/
+*.pyc
+
+# Intermediate pipeline artifacts
+posts_raw.json
+posts_with_salary.parquet
+salarios_dedup.parquet
+salarios_tabla.csv
+extraction_review.txt
+
+# Artifacts from a different project that share this directory
+cs2_*
+find_creators.py
+log.md
+roadmap_youtube.md
