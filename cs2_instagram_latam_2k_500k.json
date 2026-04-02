@@ -1,0 +1,68 @@
+{
+  "criteria": {
+    "min_followers": 2000,
+    "max_followers": 500000,
+    "platform": "instagram",
+    "region": "LATAM",
+    "method": "Instagram web_profile_info API. Sources: (1) social links from Twitch GQL queries, (2) direct handle guesses from YouTube/Twitch creator names. LATAM filter: city/country in bio, email TLD .ar/.uy, Argentine/Uruguayan names and slang"
+  },
+  "filtered_creators": [
+    {
+      "username": "gordoreally_",
+      "url": "https://www.instagram.com/gordoreally_/",
+      "followers": 69293,
+      "country": "Argentina",
+      "notes": "Ignacio Agustín Grosso — CS2 streamer on Twitch (69K) and Kick. Also in Twitch list."
+    },
+    {
+      "username": "sramilcar",
+      "url": "https://www.instagram.com/sramilcar/",
+      "followers": 64455,
+      "country": "Argentina",
+      "notes": "'gordo adicto al mate', 'boludeo', based in Olavarría (Buenos Aires province). CS2 YouTuber @SrAmilcar. with 87.5K subs."
+    },
+    {
+      "username": "branuelcs",
+      "url": "https://www.instagram.com/branuelcs/",
+      "followers": 60854,
+      "country": "Argentina",
+      "notes": "Brandon — Argentine CS2 creator. Also YouTube @branuelcs (27.4K) and Twitch branuel (34K)."
+    },
+    {
+      "username": "luchoforg1",
+      "url": "https://www.instagram.com/luchoforg1/",
+      "followers": 30074,
+      "country": "Argentina",
+      "notes": "Lucho Forgione — forg1's Instagram. Bio: '@twitch / forg1 — Counter Strike — Creador de Contenido @auroragamingg — Bell Ville - Córdoba'. Also in Twitch list (251K)."
+    },
+    {
+      "username": "safirovt_",
+      "url": "https://www.instagram.com/safirovt_/",
+      "followers": 26933,
+      "country": "Argentina",
+      "notes": "Safiro — safiro01's Instagram. Twitch partner, safiro@doxen.com.ar (.ar domain). Also in Twitch list (174K)."
+    },
+    {
+      "username": "hettacs",
+      "url": "https://www.instagram.com/hettacs/",
+      "followers": 14003,
+      "country": "Argentina",
+      "notes": "hetta — Bio: 'CS argentino'. Also YouTube @hettacs (40.4K)."
+    }
+  ],
+  "excluded": [
+    {"username": "elmorocho7", "followers": 1969, "reason": "Below range (1.97K < 2K)"},
+    {"username": "zafirocs", "followers": 436, "reason": "Below range — different/inactive account"},
+    {"username": "barziscs", "followers": 7, "reason": "Below range — nearly no Instagram presence"},
+    {"username": "el_nioz", "followers": 0, "reason": "Inactive Instagram account"},
+    {"username": "dareh", "followers": 201, "reason": "Not the YouTuber Dareh (different person: David Rehnberg)"}
+  ],
+  "not_found_or_rate_limited": [
+    "nahueevazquez (strakatv's IG — returned null)",
+    "nikozfps (rate limited during check)",
+    "lucasmdqcs (rate limited)",
+    "niozera (rate limited)"
+  ],
+  "profiles_checked": 25,
+  "notes": "LATAM CS2 Instagram scene is small. Most Argentine CS2 creators have stronger presence on Twitch/YouTube than Instagram. gordoreally_ (69K) is the largest LATAM CS2 Instagram account found. Note: branuelcs, luchoforg1, and safirovt_ appear across multiple platforms (cross-platform creators)."
+}

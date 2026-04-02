@@ -1,0 +1,90 @@
+{
+  "criteria": {
+    "min_followers": 2000,
+    "max_followers": 500000,
+    "platform": "twitch",
+    "region": "LATAM",
+    "method": "TwitchTracker top-700 Spanish-language streamers (15 pages), filtered by lastGame=Counter-Strike via Twitch GQL inline query. LATAM filter: email TLD .ar/.uy, city/country mentions, name analysis (Argentine surnames), absence of Spain markers (LVP, KOI, Gentlemates, Valladolid, vosotros)"
+  },
+  "filtered_creators": [
+    {
+      "login": "strakatv",
+      "display_name": "strakatv",
+      "followers": 271951,
+      "url": "https://www.twitch.tv/strakatv",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer — IG linked: nahueevazquez (Nahuel Vázquez, Argentine name)"
+    },
+    {
+      "login": "forg1",
+      "display_name": "forg1",
+      "followers": 251009,
+      "url": "https://www.twitch.tv/forg1",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer — 'CS por donde mires', Creador de Contenido @AuroraGaming, Bell Ville - Córdoba (confirmed via IG luchoforg1 bio)"
+    },
+    {
+      "login": "safiro01",
+      "display_name": "Safiro01",
+      "followers": 173954,
+      "url": "https://www.twitch.tv/safiro01",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer — safiro@doxen.com.ar (.ar = Argentina domain)"
+    },
+    {
+      "login": "elmorocho7",
+      "display_name": "ElmoRocho7",
+      "followers": 111577,
+      "url": "https://www.twitch.tv/elmorocho7",
+      "country": "Argentina",
+      "notes": "Argentine ex-professional CS player & streamer — 'El Morocho' (Argentine nickname)"
+    },
+    {
+      "login": "gordoreally",
+      "display_name": "GordoReally",
+      "followers": 69331,
+      "url": "https://www.twitch.tv/gordoreally",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer — full name: Ignacio Agustín Grosso (Italian-origin Argentine surname), 69K IG followers"
+    },
+    {
+      "login": "nikozfps",
+      "display_name": "nikozfps",
+      "followers": 64646,
+      "url": "https://www.twitch.tv/nikozfps",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer — nicolas.maravilla@gmail.com ('Maravilla' = iconic Argentine boxing reference: Sergio 'Maravilla' Martínez)"
+    },
+    {
+      "login": "branuel",
+      "display_name": "branuel",
+      "followers": 34289,
+      "url": "https://www.twitch.tv/branuel",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer & YouTuber — confirmed LATAM via YouTube @branuelcs and IG branuelcs (60.9K)"
+    },
+    {
+      "login": "locomass22",
+      "display_name": "locomass22",
+      "followers": 11412,
+      "url": "https://www.twitch.tv/locomass22",
+      "country": "Argentina",
+      "notes": "Likely Argentine CS2 streamer — 'Me llamo Maxi', no Spain markers found. 'Maxi' is common Argentine diminutive."
+    }
+  ],
+  "excluded_spain": [
+    {"login": "starwraith", "followers": 398069, "reason": "Spain — competed in LVP (Liga de Videojuegos Profesional, Spain)"},
+    {"login": "x6flipin", "followers": 396028, "reason": "Spain — FlipiN, Spanish ex-pro player, 'Counter-Strike como forma de vida'"},
+    {"login": "x9nium", "followers": 44348, "reason": "Spain — caster/analyst for KOI and M8 (Spain esports orgs)"},
+    {"login": "martiinezsa", "followers": 45164, "reason": "Spain — AWPer for @gentlemates (Spain esports org)"},
+    {"login": "v1nchenso7", "followers": 45333, "reason": "Spain — Instagram bio: 'Valladolid' (city in Castile, Spain)"}
+  ],
+  "excluded_uncertain": [
+    {"login": "ezconde", "followers": 57354, "reason": "Origin unverified — no location info found in any profile"},
+    {"login": "the_real_fer", "followers": 34236, "reason": "Origin ambiguous — 'Hector Fernandez Jimenez' is neutral Spanish name"},
+    {"login": "aaruxfps", "followers": 5660, "reason": "Bilingual Spanish/Portuguese, small channel — origin unclear"}
+  ],
+  "candidates_scanned": 700,
+  "total_cs2_in_range": 16,
+  "notes": "700 Spanish-language streamers from TwitchTracker top 15 pages (ranked by avg viewers Apr 2026). LATAM Twitch CS2 scene dominated by Argentina (7/8 confirmed). No significant CS2 streamers found from Mexico, Colombia, Chile, Peru in this dataset."
+}

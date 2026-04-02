@@ -1,0 +1,77 @@
+CS2 Creadores LATAM 2k-500k — Combinado 3 Plataformas
+=======================================================
+Fecha: 2026-04-02
+Región: América Latina (excluye España)
+
+RESUMEN
+-------
+YouTube  : 13 canales individuales
+Twitch   :  8 streamers individuales
+Instagram:  6 cuentas individuales
+TOTAL    : 27 entradas (varios creadores aparecen en múltiples plataformas)
+
+Creadores únicos identificados: ~17
+- Argentina domina: ~14 de los 17 creadores únicos
+- Uruguay: 2 (ZAFIROCS, el_nioz)
+- LATAM sin país confirmado: 1 (juanch1)
+
+YOUTUBE (13)
+------------
+Dareh              235,000  https://www.youtube.com/@Dareh              [Argentina]
+Serious            140,000  https://www.youtube.com/@SeriousCS          [Argentina]
+SrAmilcar           87,500  https://www.youtube.com/@SrAmilcar.         [Argentina - Olavarría]
+lucasmdqcs          51,400  https://www.youtube.com/@lucasmdqcs         [Argentina - Mar del Plata]
+lucasmdqYT          47,400  https://www.youtube.com/@lucasmdqYT         [Argentina - Mar del Plata, 2do canal]
+ZAFIROCS            45,100  https://www.youtube.com/@ZAFIROCS           [Uruguay - Montevideo]
+hettacs             40,400  https://www.youtube.com/@hettacs            [Argentina]
+ElmoRocho7          28,100  https://www.youtube.com/@ElmoRocho7         [Argentina]
+branuelcs           27,400  https://www.youtube.com/@branuelcs          [Argentina]
+juanch1             24,400  https://www.youtube.com/@juanch1            [LATAM]
+BarZisCS            18,000  https://www.youtube.com/@barziscs           [Argentina]
+el_nioz              8,200  https://www.youtube.com/@niozera            [Uruguay]
+GUANCS               3,000  https://www.youtube.com/@guancs             [Argentina - Morón/Moreno, GBA]
+
+TWITCH (8)
+----------
+strakatv           271,951  https://www.twitch.tv/strakatv              [Argentina]
+forg1              251,009  https://www.twitch.tv/forg1                 [Argentina - Bell Ville, Córdoba]
+safiro01           173,954  https://www.twitch.tv/safiro01              [Argentina]
+elmorocho7         111,577  https://www.twitch.tv/elmorocho7            [Argentina]
+gordoreally         69,331  https://www.twitch.tv/gordoreally           [Argentina]
+nikozfps            64,646  https://www.twitch.tv/nikozfps              [Argentina]
+branuel             34,289  https://www.twitch.tv/branuel               [Argentina]
+locomass22          11,412  https://www.twitch.tv/locomass22            [Argentina - likely]
+
+INSTAGRAM (6)
+-------------
+gordoreally_        69,293  https://www.instagram.com/gordoreally_/     [Argentina]
+sramilcar           64,455  https://www.instagram.com/sramilcar/        [Argentina - Olavarría]
+branuelcs           60,854  https://www.instagram.com/branuelcs/        [Argentina]
+luchoforg1          30,074  https://www.instagram.com/luchoforg1/       [Argentina - Córdoba]
+safirovt_           26,933  https://www.instagram.com/safirovt_/        [Argentina]
+hettacs             14,003  https://www.instagram.com/hettacs/          [Argentina]
+
+NOTAS
+-----
+Creadores multi-plataforma:
+- forg1: Twitch 251K + IG luchoforg1 30K
+- safiro01: Twitch 174K + IG safirovt_ 27K
+- elmorocho7: Twitch 112K + YouTube 28.1K
+- gordoreally: Twitch 69K + IG gordoreally_ 69K
+- branuel: Twitch 34K + YouTube branuelcs 27.4K + IG branuelcs 60.9K
+- SrAmilcar: YouTube 87.5K + IG sramilcar 64.5K
+- hettacs: YouTube 40.4K + IG hettacs 14K
+
+Excluidos como España confirmada (CS2, 2k-500k):
+- starwraith (Twitch 398K, LVP Spain)
+- x6flipin/FlipiN (Twitch 396K, Spain pro)
+- HDSuSo (YouTube 60K, 'Sed bienvenidos')
+- Blackelespanolito (YouTube 488K, Spain)
+- codigoampeter (YouTube 27.6K, Spain - menciona Xokas)
+- v1nchenso7 (Twitch 45K, Valladolid Spain)
+- martiinezsa (Twitch 45K, Gentlemates Spain)
+- x9nium (Twitch 44K, KOI/M8 Spain caster)
+
+Sin presencia significativa encontrada (tras 30+ queries específicas):
+- México, Colombia, Chile, Perú, Venezuela en CS2 2k-500k: 0 creadores individuales confirmados
+  La escena CS2 hispanohablante a esta escala está concentrada en Argentina y España.

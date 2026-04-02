@@ -1,0 +1,131 @@
+{
+  "criteria": {
+    "min_subscribers": 2000,
+    "max_subscribers": 500000,
+    "platform": "youtube",
+    "region": "LATAM",
+    "method": "YouTube internal API /youtubei/v1/search, ~80 queries, channels filter (EgIQAg==), 800+ channels scanned. LATAM filter: linguistic markers (vos/acá/aguante/boludeo/che/wacho/concha/brasileros), city/country references, email TLD .ar/.uy"
+  },
+  "filtered_creators": [
+    {
+      "handle": "@Dareh",
+      "title": "Dareh",
+      "subscribers": 235000,
+      "url": "https://www.youtube.com/@Dareh",
+      "country": "Argentina",
+      "notes": "Argentine CS2 moments/clips creator — 'subo momentos graciosos de mis partidas de csgo', 'pasarla bien' (LATAM marker), 'Los Brasileros Me Odian' (Argentine perspective)"
+    },
+    {
+      "handle": "@SeriousCS",
+      "title": "Serious",
+      "subscribers": 140000,
+      "url": "https://www.youtube.com/@SeriousCS",
+      "country": "Argentina",
+      "notes": "Argentine CS2 individual creator — '¿Que onda Mabel?'"
+    },
+    {
+      "handle": "@SrAmilcar.",
+      "title": "SrAmilcar",
+      "subscribers": 87500,
+      "url": "https://www.youtube.com/@SrAmilcar.",
+      "country": "Argentina",
+      "notes": "Argentine CS2 creator — 'concha de su madre' (Argentine expletive), 'gordo adicto al mate', based in Olavarría, Buenos Aires province"
+    },
+    {
+      "handle": "@lucasmdqcs",
+      "title": "lucasmdqcs",
+      "subscribers": 51400,
+      "url": "https://www.youtube.com/@lucasmdqcs",
+      "country": "Argentina",
+      "notes": "Argentine CS2 creator from Mar del Plata (mdq = Mar del Plata) — 'Que onda pa'"
+    },
+    {
+      "handle": "@lucasmdqYT",
+      "title": "lucasmdqYT",
+      "subscribers": 47400,
+      "url": "https://www.youtube.com/@lucasmdqYT",
+      "country": "Argentina",
+      "notes": "Secondary channel of lucasmdqcs (same creator, Mar del Plata). Both channels active."
+    },
+    {
+      "handle": "@ZAFIROCS",
+      "title": "ZAFIROCS",
+      "subscribers": 45100,
+      "url": "https://www.youtube.com/@ZAFIROCS",
+      "country": "Uruguay",
+      "notes": "Uruguayan CS2 creator — email zafiromvd@... (mvd = Montevideo)"
+    },
+    {
+      "handle": "@hettacs",
+      "title": "hetta",
+      "subscribers": 40400,
+      "url": "https://www.youtube.com/@hettacs",
+      "country": "Argentina",
+      "notes": "Argentine CS2 creator — IG bio: 'CS argentino'"
+    },
+    {
+      "handle": "@ElmoRocho7",
+      "title": "ElmoRocho7",
+      "subscribers": 28100,
+      "url": "https://www.youtube.com/@ElmoRocho7",
+      "country": "Argentina",
+      "notes": "Argentine ex-pro CS player & content creator — also active on Twitch (112K)"
+    },
+    {
+      "handle": "@branuelcs",
+      "title": "branuel",
+      "subscribers": 27400,
+      "url": "https://www.youtube.com/@branuelcs",
+      "country": "Argentina",
+      "notes": "Argentine CS2 streamer & YouTuber — also Twitch 34K, IG 60.9K"
+    },
+    {
+      "handle": "@juanch1",
+      "title": "juanch1",
+      "subscribers": 24400,
+      "url": "https://www.youtube.com/@juanch1",
+      "country": "LATAM",
+      "notes": "LATAM CS2 creator — 'aguante' (LATAM marker)"
+    },
+    {
+      "handle": "@barziscs",
+      "title": "BarZisCS",
+      "subscribers": 18000,
+      "url": "https://www.youtube.com/@barziscs",
+      "country": "Argentina",
+      "notes": "Argentine CS2 creator — 'wacho' (Argentine slang for 'guy/dude')"
+    },
+    {
+      "handle": "@niozera",
+      "title": "el_nioz",
+      "subscribers": 8200,
+      "url": "https://www.youtube.com/@niozera",
+      "country": "Uruguay",
+      "notes": "Uruguayan CS2 creator — 'UY' country code in profile"
+    },
+    {
+      "handle": "@guancs",
+      "title": "GUANCS",
+      "subscribers": 3000,
+      "url": "https://www.youtube.com/@guancs",
+      "country": "Argentina",
+      "notes": "Argentine CS2 creator — based in Morón/Moreno, Greater Buenos Aires"
+    }
+  ],
+  "excluded_notable": [
+    {"handle": "@VectorMVP", "subscribers": 238000, "reason": "Variety gaming (Resident Evil, CoD, CS2 occasional) — not CS2 focused; collaborates with Spain creators"},
+    {"handle": "@TcK10", "subscribers": 393000, "reason": "Portuguese-language Brazilian Valorant creator"},
+    {"handle": "@brillager", "subscribers": 344000, "reason": "Argentine variety/commentary, no CS2 content"},
+    {"handle": "@bykingcl", "subscribers": 243000, "reason": "Chilean IRL/variety streamer, no CS2"},
+    {"handle": "@JoacoLopezPlus", "subscribers": 144000, "reason": "Argentine variety reactions (second channel), no CS2"},
+    {"handle": "@DylanteroClips", "subscribers": 40000, "reason": "Chilean clips compilation channel, not primary creator"},
+    {"handle": "@codigoampeter", "subscribers": 27600, "reason": "Spain-based CS2 skins channel (mentions Xokas)"},
+    {"handle": "@mateozcs2", "subscribers": 24700, "reason": "Likely Spain — skin trading content style"},
+    {"handle": "@HDSuSo", "subscribers": 60000, "reason": "Spain — 'Sed bienvenidos' (vosotros imperative)"},
+    {"handle": "@Blackelespanolito", "subscribers": 488000, "reason": "Spain — 'os doy la bienvenida'"},
+    {"handle": "@CSArgentina", "subscribers": 25000, "reason": "Argentine CS2 compilation/org, not individual creator"}
+  ],
+  "candidates_scanned": 800,
+  "queries_run": 80,
+  "notes": "LATAM CS2 YouTube scene is dominated by Argentina (11/13) and Uruguay (2/13). No significant Mexican, Colombian, Chilean or other LATAM country individual CS2 creators found at 2k-500k scale despite 30+ country-specific queries. Spain creators dominate the higher follower ranges."
+}
