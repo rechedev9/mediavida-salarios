@@ -199,6 +199,46 @@ scrapper/
 
 ---
 
+# Roadmap: Creadores CS2 LATAM 2k-500k seguidores
+
+## Estado actual: ✅ COMPLETADO — 2026-04-02
+
+| Plataforma | Estado | Creadores | Archivo de output |
+|---|---|---|---|
+| YouTube   | ✅ completado | 13 canales | `cs2_youtube_latam_2k_500k.json` |
+| Twitch    | ✅ completado | 8 streamers | `cs2_twitch_latam_2k_500k.json` |
+| Instagram | ✅ completado | 6 cuentas   | `cs2_instagram_latam_2k_500k.json` |
+
+## Resultados
+
+- **27 entradas totales** / ~17 creadores únicos
+- **Argentina domina**: ~14 de 17 únicos. Uruguay: 2. LATAM sin país: 1.
+- **Hallazgo clave**: La escena CS2 hispana a escala 2k-500k está concentrada en Argentina y España. México, Colombia, Chile, Perú y Venezuela no tienen creadores individuales CS2 confirmados en este rango.
+
+### Top por plataforma
+- **YouTube**: Dareh (235K) > Serious (140K) > SrAmilcar (87.5K)
+- **Twitch**: strakatv (272K) > forg1 (251K) > safiro01 (174K)
+- **Instagram**: gordoreally_ (69K) > sramilcar (64.5K) > branuelcs (60.9K)
+
+### Creadores multi-plataforma
+- forg1: Twitch 251K + IG luchoforg1 30K
+- safiro01: Twitch 174K + IG safirovt_ 27K
+- elmorocho7: Twitch 112K + YouTube 28.1K
+- gordoreally: Twitch 69K + IG gordoreally_ 69K
+- branuel: Twitch 34K + YouTube 27.4K + IG 60.9K
+- SrAmilcar: YouTube 87.5K + IG sramilcar 64.5K
+
+## Archivos generados
+```
+cs2_youtube_latam_2k_500k.json
+cs2_twitch_latam_2k_500k.json
+cs2_instagram_latam_2k_500k.json
+cs2_creators_latam_2k_500k.txt
+cs2_creators_latam_2k_500k.csv
+```
+
+---
+
 # Roadmap: Creadores CS2 hispanos 20k-100k seguidores
 
 ## Objetivo
