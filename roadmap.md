@@ -210,7 +210,7 @@ Rango anterior completado: 2k-20k (18 IG + 8 Twitch + 13 YT = 39 total).
 
 | Plataforma | Estado | Archivo de output |
 |---|---|---|
-| Instagram | ⏳ pendiente | `cs2_instagram_20k_100k.json` |
+| Instagram | ✅ completado (6 creadores) | `cs2_instagram_20k_100k.json` |
 | Twitch | ⏳ pendiente | `cs2_twitch_20k_100k.json` |
 | YouTube | ⏳ pendiente | `cs2_youtube_20k_100k.json` |
 
@@ -244,4 +244,9 @@ cs2_creators_combined_20k_100k.txt / .csv
 
 ## Log de progreso
 
-_(vacío — pendiente inicio)_
+### Instagram — ✅ 2026-04-02
+- 10 queries de Google dorking via Chrome browser automation
+- 54 perfiles verificados con fetch() desde instagram.com
+- 10 en rango 20k-100k, 6 clasificados como creadores individuales
+- Excluidos: csg0fun/drunkgamingcs (clips), bonoxs_latam/enagenda_ (org/media)
+- Resultados: `cs2_instagram_20k_100k.json/txt/csv`

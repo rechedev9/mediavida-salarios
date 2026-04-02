@@ -10,8 +10,13 @@ salarios_dedup.parquet
 salarios_tabla.csv
 extraction_review.txt
 
-# Artifacts from a different project that share this directory
-cs2_*
+# CS2 20k scraping — old run artifacts (kept locally, not in repo)
+cs2_creators*
+cs2_twitch_creators*
+cs2_youtube_creators*
 find_creators.py
 log.md
 roadmap_youtube.md
+
+# CS2 20k-100k — output files tracked in repo
+# (not ignored)

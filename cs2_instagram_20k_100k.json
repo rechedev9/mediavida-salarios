@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "min_followers": 20000,
+    "max_followers": 100000,
+    "platform": "instagram",
+    "language": "hispanic/spanish"
+  },
+  "filtered_creators": [
+    {"username": "branuelcs", "url": "https://www.instagram.com/branuelcs/", "followers": 61000, "notes": "brandon — CS2 streamer"},
+    {"username": "flipin1", "url": "https://www.instagram.com/flipin1/", "followers": 46000, "notes": "Antonio Rivas del Rey — CS2/gaming streamer España"},
+    {"username": "znorux", "url": "https://www.instagram.com/znorux/", "followers": 55000, "notes": "ZNORUX — CS2 creator"},
+    {"username": "ericanguloleonel", "url": "https://www.instagram.com/ericanguloleonel/", "followers": 40000, "notes": "Eric Leonel Angulo — individual CS2 creator"},
+    {"username": "javybasualdo", "url": "https://www.instagram.com/javybasualdo/", "followers": 69000, "notes": "JavyBasualdo — CS2 pro/streamer Argentina"},
+    {"username": "jesusitoshiny", "url": "https://www.instagram.com/jesusitoshiny/", "followers": 35000, "notes": "jesusitoshiny — Tecnología & Videojuegos, includes CS2"}
+  ],
+  "excluded": [
+    {"username": "csg0fun", "followers": 26000, "reason": "compilación de clips — 3,371 publicaciones, no creador individual"},
+    {"username": "drunkgamingcs", "followers": 61000, "reason": "memes/clips compilation page — 1,701 publicaciones"},
+    {"username": "bonoxs_latam", "followers": 74000, "reason": "marca/organización LATAM — no creador individual"},
+    {"username": "enagenda_", "followers": 60000, "reason": "medios/eventos — 6,710 publicaciones, página de agenda gaming"},
+    {"username": "teamisurus", "followers": 134000, "reason": "fuera de rango y organización esports (Isurus)"},
+    {"username": "shindengg", "followers": 108000, "reason": "fuera de rango (108K)"},
+    {"username": "madhousetv_", "followers": 153000, "reason": "fuera de rango (153K) y organización media"},
+    {"username": "urgame_by_amd", "followers": 105000, "reason": "fuera de rango (105K) y marca AMD"},
+    {"username": "hispaok", "followers": 614000, "reason": "fuera de rango (614K) y medio de comunicación"},
+    {"username": "canal.mutuo", "followers": 314000, "reason": "fuera de rango (314K)"}
+  ],
+  "all_profiles_checked": 54
+}
