@@ -1,0 +1,14 @@
+CS2 Twitch — Creadores hispanos 20k-100k seguidores
+====================================================
+Fecha: 2026-04-02  Hora: 09:27h (horario baja actividad)
+
+CREADORES CS2 CONFIRMADOS (3)
+-------------------------------
+x9nium      44,348  https://twitch.tv/x9nium      last: Counter-Strike
+ezconde     57,353  https://twitch.tv/ezconde     last: Counter-Strike
+v1nchenso7  45,333  https://twitch.tv/v1nchenso7  last: Counter-Strike
+
+NOTA: Scrape en horario de baja actividad. Para captura completa
+repetir a las 20-00h ART / 21-01h CET (horario pico).
+
+Total candidatos verificados: 423 (TwitchTracker páginas 1-9)

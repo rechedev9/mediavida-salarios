@@ -211,7 +211,7 @@ Rango anterior completado: 2k-20k (18 IG + 8 Twitch + 13 YT = 39 total).
 | Plataforma | Estado | Archivo de output |
 |---|---|---|
 | Instagram | ✅ completado (6 creadores) | `cs2_instagram_20k_100k.json` |
-| Twitch | ⏳ pendiente | `cs2_twitch_20k_100k.json` |
+| Twitch | ✅ completado (3 creadores — hora baja actividad) | `cs2_twitch_20k_100k.json` |
 | YouTube | ⏳ pendiente | `cs2_youtube_20k_100k.json` |
 
 ## Estrategia por plataforma
@@ -243,6 +243,14 @@ cs2_creators_combined_20k_100k.txt / .csv
 ```
 
 ## Log de progreso
+
+### Twitch — ✅ 2026-04-02
+- TwitchTracker páginas 1-9 (423 candidatos)
+- Batch GQL API (22 requests × 20 usuarios = followers + lastGame)
+- 3 con lastGame = Counter-Strike en rango 20k-100k
+- 0 streamers en vivo (hora baja — 09:27h)
+- Para completar: re-run en horario pico LATAM/España
+- Resultados: `cs2_twitch_20k_100k.json/txt`
 
 ### Instagram — ✅ 2026-04-02
 - 10 queries de Google dorking via Chrome browser automation

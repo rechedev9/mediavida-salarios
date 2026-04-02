@@ -1,0 +1,48 @@
+{
+  "criteria": {
+    "min_followers": 20000,
+    "max_followers": 100000,
+    "platform": "twitch",
+    "language": "hispanic/spanish",
+    "method": "TwitchTracker pages 1-9 + GQL API follower verification"
+  },
+  "filtered_creators": [
+    {
+      "login": "x9nium",
+      "displayName": "x9nium",
+      "followers": 44348,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/x9nium",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    },
+    {
+      "login": "ezconde",
+      "displayName": "ezconde",
+      "followers": 57353,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/ezconde",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    },
+    {
+      "login": "v1nchenso7",
+      "displayName": "v1NCHENSO7",
+      "followers": 45333,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/v1nchenso7",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    }
+  ],
+  "variety_in_range_excluded": [
+    {"login": "ringroyalefights", "followers": 76063, "lastGame": "Special Events"},
+    {"login": "sol1xd", "followers": 81916, "lastGame": "League of Legends"},
+    {"login": "elpelotasssss", "followers": 69356, "lastGame": "Albion Online"},
+    {"login": "paache_", "followers": 93104, "lastGame": "FIFA Soccer 09"},
+    {"login": "jaimemellado_", "followers": 91966, "lastGame": "League of Legends"},
+    {"login": "facudiazt", "followers": 95705, "lastGame": "Just Chatting"},
+    {"login": "4fungamingg", "followers": 95313, "lastGame": "Project Zomboid"},
+    {"login": "sliverrk", "followers": 97032, "lastGame": "Mario Kart World"},
+    {"login": "volcanicdogg", "followers": 93505, "lastGame": "Slots"}
+  ],
+  "notes": "Scrape realizado a las 09:27h. Para mayor cobertura, repetir en horario pico LATAM (20-00h ART) o España (21-01h CET). TwitchTracker solo muestra snapshot de viewers — algunos CS2 streamers pueden estar offline.",
+  "candidates_checked": 423
+}
