@@ -212,7 +212,7 @@ Rango anterior completado: 2k-20k (18 IG + 8 Twitch + 13 YT = 39 total).
 |---|---|---|
 | Instagram | ✅ completado (6 creadores) | `cs2_instagram_20k_100k.json` |
 | Twitch | ✅ completado (3 creadores — hora baja actividad) | `cs2_twitch_20k_100k.json` |
-| YouTube | ⏳ pendiente | `cs2_youtube_20k_100k.json` |
+| YouTube | ✅ completado (15 creadores) | `cs2_youtube_20k_100k.json` |
 
 ## Estrategia por plataforma
 
@@ -251,6 +251,15 @@ cs2_creators_combined_20k_100k.txt / .csv
 - 0 streamers en vivo (hora baja — 09:27h)
 - Para completar: re-run en horario pico LATAM/España
 - Resultados: `cs2_twitch_20k_100k.json/txt`
+
+### YouTube — ✅ 2026-04-02
+- 20 queries via YouTube internal API (/youtubei/v1/search, channels filter EgIQAg==)
+- 309 canales únicos descubiertos
+- 30 en rango 20k-100k
+- 15 clasificados como creadores individuales hispanos
+- Excluidos: BLAST/StarLadder/ESL (orgs), LiminhaG0d/illegal Moments/LIM-CS/DEKO/Thour/EVY/GODxpEEzY/BIBA (no hispanos), CS2 Cheats (cheat site), CS Argentina (compilación)
+- Resultados: `cs2_youtube_20k_100k.json/txt/csv`
+- Combinado: `cs2_creators_combined_20k_100k.txt/csv` (24 total: 15 YT + 3 Twitch + 6 IG)
 
 ### Instagram — ✅ 2026-04-02
 - 10 queries de Google dorking via Chrome browser automation

@@ -1,0 +1,41 @@
+CS2 YouTube — Creadores hispanos 20k-100k suscriptores
+======================================================
+Fecha: 2026-04-02  Método: YouTube internal API, 20 queries, 309 canales únicos
+
+CREADORES CS2 CONFIRMADOS (15)
+--------------------------------
+vladopardcs2       88,700  https://www.youtube.com/@vladopardcs2    CS2 faceit, hispano
+SrAmilcar.         87,500  https://www.youtube.com/@SrAmilcar.      España/Kick, resúmenes directos
+HDSuSo             60,000  https://www.youtube.com/@HDSuSo          CS2 Español main
+mixwellCS          54,600  https://www.youtube.com/@mixwellCS       Ex-pro, español 10+ años
+lucasmdqcs         51,400  https://www.youtube.com/@lucasmdqcs      Argentina (Mar del Plata)
+AsylumCSGO         45,800  https://www.youtube.com/@AsylumCSGO      España, individual
+ZAFIROCS           45,100  https://www.youtube.com/@ZAFIROCS        Uruguay (Montevideo)
+TORE1005           43,200  https://www.youtube.com/@TORE1005        España, streamer/creator
+soysendoh          42,100  https://www.youtube.com/@soysendoh       España, CS2 y más
+siezCS2            41,200  https://www.youtube.com/@siezCS2         España, POV CS2
+TiburoNcs          28,000  https://www.youtube.com/@TiburoNcs       Hispano, jugador pro
+Pol0cs             28,000  https://www.youtube.com/@Pol0cs          Hispano, CS pro player
+mateozcs2          24,700  https://www.youtube.com/@mateozcs2       España, individual
+juanch1            24,400  https://www.youtube.com/@juanch1         España, individual
+Yufiie             20,800  https://www.youtube.com/@Yufiie          España, ex-comentarista OpTic
+
+EXCLUIDOS EN RANGO 20k-100k (no hispanos / org / compilaciones)
+----------------------------------------------------------------
+BLASTPremierHighlights  98,000  org internacional
+LiminhaG0d              76,900  probable portugués/no hispano
+illegalmoments          72,900  compilación inglés
+lim-csgopov             71,800  contenido inglés
+DEKO CHILL              70,000  contenido ruso
+CS2 PRO POV             58,100  compilación no hispana
+ThourCS2                53,200  contenido inglés
+StarLadder Highlights   43,700  org internacional
+EVY CS2 COACHING        41,100  contenido francés
+GODxpEEzY               25,500  contenido inglés
+ESL Counter-Strike B    25,200  org (canal secundario)
+CS Argentina            25,000  canal de recaps/compilación
+Dino Rey Latino HD      23,200  canal de doblajes, no creador CS2
+CS2 Cheats              22,000  sitio de cheats
+BIBA CS2                20,000  contenido alemán
+
+Total candidatos verificados: 309 (20 queries YouTube internal API)

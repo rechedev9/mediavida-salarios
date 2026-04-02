@@ -1,0 +1,136 @@
+{
+  "criteria": {
+    "min_followers": 20000,
+    "max_followers": 100000,
+    "platform": "youtube",
+    "language": "hispanic/spanish",
+    "method": "YouTube internal API /youtubei/v1/search, 20 queries, channels filter (EgIQAg==), 309 unique channels scraped"
+  },
+  "filtered_creators": [
+    {
+      "handle": "@vladopardcs2",
+      "title": "vLADOPARD 2",
+      "subscribers": 88700,
+      "url": "https://www.youtube.com/@vladopardcs2",
+      "notes": "CS2 faceit content, Hispanic creator"
+    },
+    {
+      "handle": "@SrAmilcar.",
+      "title": "El Amilcar",
+      "subscribers": 87500,
+      "url": "https://www.youtube.com/@SrAmilcar.",
+      "notes": "Spanish creator, streams on Kick, CS2 highlights/resúmenes"
+    },
+    {
+      "handle": "@HDSuSo",
+      "title": "HDSuSo | CS2 Español",
+      "subscribers": 60000,
+      "url": "https://www.youtube.com/@HDSuSo",
+      "notes": "CS2 español main channel"
+    },
+    {
+      "handle": "@mixwellCS",
+      "title": "mixwellCS",
+      "subscribers": 54600,
+      "url": "https://www.youtube.com/@mixwellCS",
+      "notes": "Ex-pro player, Spanish CS content 10+ years"
+    },
+    {
+      "handle": "@lucasmdqcs",
+      "title": "lucasmdq TWO",
+      "subscribers": 51400,
+      "url": "https://www.youtube.com/@lucasmdqcs",
+      "notes": "Argentine creator (Mar del Plata), CS2 content"
+    },
+    {
+      "handle": "@AsylumCSGO",
+      "title": "Asylum CSGO",
+      "subscribers": 45800,
+      "url": "https://www.youtube.com/@AsylumCSGO",
+      "notes": "Spanish individual CS creator"
+    },
+    {
+      "handle": "@ZAFIROCS",
+      "title": "ZAFIRO",
+      "subscribers": 45100,
+      "url": "https://www.youtube.com/@ZAFIROCS",
+      "notes": "Uruguayan creator (Montevideo), CS2 content"
+    },
+    {
+      "handle": "@TORE1005",
+      "title": "TORE1005",
+      "subscribers": 43200,
+      "url": "https://www.youtube.com/@TORE1005",
+      "notes": "Spanish individual CS2 creator/streamer"
+    },
+    {
+      "handle": "@soysendoh",
+      "title": "sendoh",
+      "subscribers": 42100,
+      "url": "https://www.youtube.com/@soysendoh",
+      "notes": "Spanish CS2 creator"
+    },
+    {
+      "handle": "@siezCS2",
+      "title": "Siez CS2",
+      "subscribers": 41200,
+      "url": "https://www.youtube.com/@siezCS2",
+      "notes": "Spanish POV CS2 content"
+    },
+    {
+      "handle": "@TiburoNcs",
+      "title": "TiburoN",
+      "subscribers": 28000,
+      "url": "https://www.youtube.com/@TiburoNcs",
+      "notes": "Hispanic pro player and content creator"
+    },
+    {
+      "handle": "@Pol0cs",
+      "title": "Pol0",
+      "subscribers": 28000,
+      "url": "https://www.youtube.com/@Pol0cs",
+      "notes": "CS pro player, Hispanic (matched Spanish queries)"
+    },
+    {
+      "handle": "@mateozcs2",
+      "title": "mateoz cs",
+      "subscribers": 24700,
+      "url": "https://www.youtube.com/@mateozcs2",
+      "notes": "Spanish individual CS2 creator"
+    },
+    {
+      "handle": "@juanch1",
+      "title": "juanch1",
+      "subscribers": 24400,
+      "url": "https://www.youtube.com/@juanch1",
+      "notes": "Spanish individual CS2 creator"
+    },
+    {
+      "handle": "@Yufiie",
+      "title": "Yufiie",
+      "subscribers": 20800,
+      "url": "https://www.youtube.com/@Yufiie",
+      "notes": "Spanish creator, ex OpTic commentator, CS2 daily content"
+    }
+  ],
+  "excluded_in_range": [
+    {"handle": "@BLASTPremierHighlights", "title": "BLAST Premier CS2 Highlights", "subscribers": 98000, "reason": "international org"},
+    {"handle": "/@LiminhaG0d", "title": "LiminhaG0d", "subscribers": 76900, "reason": "likely Portuguese/non-Hispanic-Spanish"},
+    {"handle": "@illegalmoments", "title": "illegal Moments", "subscribers": 72900, "reason": "English compilation channel"},
+    {"handle": "@lim-csgopov", "title": "LIM-CS POV", "subscribers": 71800, "reason": "English content"},
+    {"handle": "@dekocsoff", "title": "DEKO CHILL", "subscribers": 70000, "reason": "Russian content"},
+    {"handle": "@CS2POVSPRO", "title": "CS2 PRO POV CUSTOM SETTINGS", "subscribers": 58100, "reason": "non-Hispanic compilation"},
+    {"handle": "@ThourCS2", "title": "Thour CS2", "subscribers": 53200, "reason": "English content"},
+    {"handle": "@starladder_cs_highlights", "title": "StarLadder CS2 Highlights", "subscribers": 43700, "reason": "international org"},
+    {"handle": "@EVYCS2", "title": "EVY - CS2 COACHING", "subscribers": 41100, "reason": "French content"},
+    {"handle": "@GODxpEEzY", "title": "GODxpEEzY", "subscribers": 25500, "reason": "English content"},
+    {"handle": "@ESLCSB", "title": "ESL Counter-Strike B", "subscribers": 25200, "reason": "org secondary channel"},
+    {"handle": "@CSArgentina", "title": "CS Argentina", "subscribers": 25000, "reason": "compilation/recap org channel"},
+    {"handle": "@DinoReyLatinoHD", "title": "Dino Rey en Español Latino [HD]", "subscribers": 23200, "reason": "dubbed content channel, not CS2 creator"},
+    {"handle": "@cs2cheatscom", "title": "CS2 Cheats", "subscribers": 22000, "reason": "cheat promotion site"},
+    {"handle": "@BIBACS", "title": "BIBA CS2", "subscribers": 20000, "reason": "German content"}
+  ],
+  "candidates_checked": 309,
+  "queries_run": 20,
+  "notes": "Scrape via YouTube internal API (youtubei/v1/search). 309 unique channels found across 20 Spanish/CS2 queries. 30 in 20k-100k range, 15 classified as individual Hispanic creators."
+}

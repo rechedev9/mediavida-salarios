@@ -11,7 +11,8 @@ salarios_tabla.csv
 extraction_review.txt
 
 # CS2 20k scraping — old run artifacts (kept locally, not in repo)
-cs2_creators*
+cs2_creators_2k*
+cs2_creators_old*
 cs2_twitch_creators*
 cs2_youtube_creators*
 find_creators.py
