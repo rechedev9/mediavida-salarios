@@ -1,0 +1,41 @@
+CS2 Creadores Hispanos 100k-500k — Combinado 3 Plataformas
+===========================================================
+Fecha: 2026-04-02
+
+RESUMEN
+-------
+YouTube  :  6 creadores individuales
+Twitch   :  5 creadores individuales
+Instagram:  1 creadora individual
+TOTAL    : 12 entradas (11 únicos — blackelespanolito aparece en YT e IG)
+
+YOUTUBE (6)
+-----------
+Blackelespanolito  488,000  https://www.youtube.com/@Blackelespanolito
+vLADOPARD          354,000  https://www.youtube.com/@vLADopard
+SirMaza            287,000  https://www.youtube.com/@sirmaza
+Dareh              235,000  https://www.youtube.com/@Dareh
+FlipiN             211,000  https://www.youtube.com/@FlipiNLosFieles
+Serious            140,000  https://www.youtube.com/@SeriousCS
+
+TWITCH (5)
+----------
+starwraith         398,069  https://www.twitch.tv/starwraith
+strakatv           271,952  https://www.twitch.tv/strakatv
+forg1              251,010  https://www.twitch.tv/forg1
+safiro01           173,954  https://www.twitch.tv/safiro01
+elmorocho7         111,578  https://www.twitch.tv/elmorocho7
+
+INSTAGRAM (1)
+-------------
+blackelespanolito  150,178  https://www.instagram.com/blackelespanolito/
+
+NOTAS
+-----
+- SirMaza (YT 287K) crea contenido de Valorant + CS2; Twitch sirmaza_ tiene 63K seguidores (20k-100k tier).
+- vLADOPARD (YT 354K) es el canal principal; @vladopardcs2 con 88.7K estaba en el rango 20k-100k.
+- blackelespanolito está en ambas plataformas: YouTube 488K + Instagram 150K (mismo creador).
+- La escena CS2 hispana en Instagram a escala 100k-500k es muy reducida; la mayoría de creadores
+  tienen más audiencia en Twitch/YouTube que en Instagram.
+- Twitch: horario pico LATAM (20-00h ART) / España (21-01h CET) podría revelar algún streamer
+  adicional que esté offline en el momento del scrape.

@@ -267,3 +267,42 @@ cs2_creators_combined_20k_100k.txt / .csv
 - 10 en rango 20k-100k, 6 clasificados como creadores individuales
 - Excluidos: csg0fun/drunkgamingcs (clips), bonoxs_latam/enagenda_ (org/media)
 - Resultados: `cs2_instagram_20k_100k.json/txt/csv`
+
+---
+
+# Roadmap: Creadores CS2 hispanos 100k-500k seguidores
+
+## Estado actual
+
+| Plataforma | Estado | Creadores | Archivo de output |
+|---|---|---|---|
+| YouTube   | ✅ completado | 6 creadores | `cs2_youtube_100k_500k.json` |
+| Twitch    | ✅ completado | 5 creadores | `cs2_twitch_100k_500k.json` |
+| Instagram | ✅ completado | 1 creador   | `cs2_instagram_100k_500k.json` |
+
+## Log de progreso
+
+### Twitch — ✅ 2026-04-02
+- TwitchTracker páginas 1-5 (Spanish+CS2 filter), 82 candidatos en rango 100k-500k
+- Batch GQL API (4 batches × 20 usuarios) → followers exactos + lastGame
+- 5 con lastGame = Counter-Strike: starwraith (398K), strakatv (272K), forg1 (251K), safiro01 (174K), elmorocho7 (112K)
+- Resultados: `cs2_twitch_100k_500k.json`
+
+### YouTube — ✅ 2026-04-02
+- 35 queries via YouTube internal API (514 canales únicos)
+- 23 en rango 100k-500k
+- 6 creadores individuales hispanos: Blackelespanolito (488K), vLADOPARD (354K), SirMaza (287K), Dareh (235K), FlipiN (211K), Serious (140K)
+- Excluidos: csproland/Waffle/Trainwreckstv (inglés), mch/MADHOUSE (portugués), NaToSaphiX/ZywOo/EliGE (no hispanos), ESL orgs
+- Resultados: `cs2_youtube_100k_500k.json`
+
+### Instagram — ✅ 2026-04-02
+- 70+ perfiles verificados via Instagram web_profile_info API
+- Handles reales de creadores encontrados via Twitch social links (GQL)
+- Solo 1 creador individual hispano en rango: blackelespanolito (150K)
+- Excluidos: teamisurus/shindengg (orgs), madhousetv_/kscerato (portugueses), peereira7 (variety/JC)
+- Nota: ecosistema CS2 hispano en Instagram es reducido a esta escala
+- Resultados: `cs2_instagram_100k_500k.json`
+
+## Combinado
+- `cs2_creators_combined_100k_500k.txt / .csv` — 12 entradas, 11 creadores únicos
+- blackelespanolito aparece en YouTube (488K) e Instagram (150K)

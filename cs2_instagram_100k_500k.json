@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "min_followers": 100000,
+    "max_followers": 500000,
+    "platform": "instagram",
+    "language": "hispanic/spanish"
+  },
+  "filtered_creators": [
+    {
+      "username": "blackelespanolito",
+      "url": "https://www.instagram.com/blackelespanolito/",
+      "followers": 150178,
+      "notes": "Alejandro Garcia — CS2 individual creator, content creator @movistarkoi, business@suppagency.gg"
+    }
+  ],
+  "excluded": [
+    {"username": "madhousetv_", "followers": 153783, "reason": "Portuguese-language Brazilian media org"},
+    {"username": "teamisurus", "followers": 133662, "reason": "esports org (Isurus), not individual creator"},
+    {"username": "shindengg", "followers": 107553, "reason": "esports team by @spreen & @litkillah — org, not individual creator"},
+    {"username": "urgame_by_amd", "followers": 105322, "reason": "AMD brand/marketing account"},
+    {"username": "peereira7", "followers": 335452, "reason": "variety/just chatting streamer, CS2 occasional — @teamheretics but not primarily CS2"},
+    {"username": "hispaok", "followers": 614455, "reason": "above 500k + Spanish media outlet"},
+    {"username": "coldzera", "followers": 724810, "reason": "above 500k + Brazilian Portuguese pro player"},
+    {"username": "kscerato", "followers": 246473, "reason": "Brazilian Portuguese CS2 pro (@furiagg) — not Hispanic Spanish"},
+    {"username": "sirmaza_", "followers": 63289, "reason": "below range (63K) — in 20k-100k tier"},
+    {"username": "javybasualdo", "followers": 68685, "reason": "below range (69K) — in 20k-100k tier"},
+    {"username": "branuelcs", "followers": 60853, "reason": "below range (61K) — in 20k-100k tier"},
+    {"username": "znorux", "followers": 54987, "reason": "below range (55K) — in 20k-100k tier"}
+  ],
+  "all_profiles_checked": 70,
+  "notes": "Checked 70+ profiles via Instagram web_profile_info API + Twitch social links. Hispanic CS2 creator pool on Instagram is very small at 100k-500k scale. Only 1 individual creator found."
+}

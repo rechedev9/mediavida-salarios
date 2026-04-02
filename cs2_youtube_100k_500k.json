@@ -1,0 +1,75 @@
+{
+  "criteria": {
+    "min_followers": 100000,
+    "max_followers": 500000,
+    "platform": "youtube",
+    "language": "hispanic/spanish",
+    "method": "YouTube internal API /youtubei/v1/search, 35 queries, channels filter (EgIQAg==), 514 unique channels scraped"
+  },
+  "filtered_creators": [
+    {
+      "handle": "@Blackelespanolito",
+      "title": "Black CSGO en Español",
+      "subscribers": 488000,
+      "url": "https://www.youtube.com/@Blackelespanolito",
+      "notes": "Spanish CS2 individual creator — 'mi canal de Counter Strike en el que podrás encontrar contenido de CS:GO diario'"
+    },
+    {
+      "handle": "@vLADopard",
+      "title": "vLADOPARD",
+      "subscribers": 354000,
+      "url": "https://www.youtube.com/@vLADopard",
+      "notes": "Hispanic CS2 creator — main channel (secondary @vladopardcs2 with 88.7K was in 20k-100k range)"
+    },
+    {
+      "handle": "@sirmaza",
+      "title": "SirMaza",
+      "subscribers": 287000,
+      "url": "https://www.youtube.com/@sirmaza",
+      "notes": "Spanish shooter creator — 'el mejor creador de contenido de shooters (Valorant y Counter Strike)'; also has Twitch 472K"
+    },
+    {
+      "handle": "@Dareh",
+      "title": "Dareh",
+      "subscribers": 235000,
+      "url": "https://www.youtube.com/@Dareh",
+      "notes": "Spanish CS2 individual creator — 'subo momentos graciosos de mis partidas de csgo'"
+    },
+    {
+      "handle": "@FlipiNLosFieles",
+      "title": "FlipiN #LosFieles",
+      "subscribers": 211000,
+      "url": "https://www.youtube.com/@FlipiNLosFieles",
+      "notes": "Spanish ex-pro CS player — 'Counter-Strike como forma de vida'"
+    },
+    {
+      "handle": "@SeriousCS",
+      "title": "Serious",
+      "subscribers": 140000,
+      "url": "https://www.youtube.com/@SeriousCS",
+      "notes": "Argentine CS2 individual creator — '¿Que onda Mabel? Subo vídeos de CS2'"
+    }
+  ],
+  "excluded_in_range": [
+    {"handle": "@csproland", "title": "Counter Strike Proland", "subscribers": 355000, "reason": "English compilation channel"},
+    {"handle": "@LuquitasRodriguez", "title": "Luquitas Rodriguez", "subscribers": 469000, "reason": "Argentine comedian/variety — not CS2 creator"},
+    {"handle": "@WaffleXD", "title": "Waffle", "subscribers": 331000, "reason": "English content"},
+    {"handle": "@madhouse_tv", "title": "MADHOUSE TV", "subscribers": 300000, "reason": "Portuguese-language Brazilian media org"},
+    {"handle": "@Trainwreckstv", "title": "Trainwreckstv", "subscribers": 269000, "reason": "English variety streamer"},
+    {"handle": "@MCH_agg", "title": "mch", "subscribers": 193000, "reason": "Portuguese-language Brazilian pro player"},
+    {"handle": "@NowackCSGO", "title": "Nowack", "subscribers": 181000, "reason": "English content"},
+    {"handle": "@ESLCSHighlights", "title": "ESL Counter-Strike Highlights", "subscribers": 170000, "reason": "International org compilation channel"},
+    {"handle": "@DiamondEsportsCenter", "title": "Diamond Esports Center", "subscribers": 163000, "reason": "Spanish gaming center org, not individual creator"},
+    {"handle": "@VaRion-sj4wd", "title": "xVaRion", "subscribers": 159000, "reason": "Argentine mystery/history channel — not CS2"},
+    {"handle": "@VodsSpreen", "title": "Spreen Vods", "subscribers": 154000, "reason": "Argentine variety VOD channel — not primarily CS2"},
+    {"handle": "@GuizziGaming", "title": "Guizzi CS2", "subscribers": 147000, "reason": "French content"},
+    {"handle": "@vLADOPARD5", "title": "vLADOPARD 5", "subscribers": 141000, "reason": "Secondary channel of vLADOPARD (main already included)"},
+    {"handle": "@NaToSaphiX", "title": "NaToSaphiX", "subscribers": 137000, "reason": "English/Danish former pro player"},
+    {"handle": "@ZywOo", "title": "ZywOo", "subscribers": 134000, "reason": "French professional player"},
+    {"handle": "@ESLSpain", "title": "ESL España", "subscribers": 124000, "reason": "ESL org Spanish channel"},
+    {"handle": "@EliGEjj", "title": "EliGE", "subscribers": 115000, "reason": "English NA professional player"}
+  ],
+  "candidates_checked": 514,
+  "queries_run": 35,
+  "notes": "514 unique channels found across 35 queries. 23 in 100k-500k range. 6 classified as individual Hispanic CS2 creators."
+}

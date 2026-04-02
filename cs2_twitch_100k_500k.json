@@ -1,0 +1,77 @@
+{
+  "criteria": {
+    "min_followers": 100000,
+    "max_followers": 500000,
+    "platform": "twitch",
+    "language": "hispanic/spanish",
+    "method": "TwitchTracker pages 1-5 (Spanish+CS2 filter) + GQL API follower/lastGame verification"
+  },
+  "filtered_creators": [
+    {
+      "login": "forg1",
+      "displayName": "forg1",
+      "followers": 251010,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/forg1",
+      "notes": "CS2 main — last broadcast Counter-Strike, Spanish-language filter"
+    },
+    {
+      "login": "safiro01",
+      "displayName": "safiro01",
+      "followers": 173954,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/safiro01",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    },
+    {
+      "login": "starwraith",
+      "displayName": "starwraith",
+      "followers": 398069,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/starwraith",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    },
+    {
+      "login": "strakatv",
+      "displayName": "strakatv",
+      "followers": 271952,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/strakatv",
+      "notes": "CS2 main — last broadcast Counter-Strike"
+    },
+    {
+      "login": "elmorocho7",
+      "displayName": "elmorocho7",
+      "followers": 111578,
+      "lastGame": "Counter-Strike",
+      "url": "https://www.twitch.tv/elmorocho7",
+      "notes": "CS2 main — last broadcast Counter-Strike, Argentine slang nickname"
+    }
+  ],
+  "variety_in_range_excluded": [
+    {"login": "agustinunaplay8", "followers": 353146, "lastGame": "Dead by Daylight"},
+    {"login": "graf", "followers": 278814, "lastGame": "QSMP"},
+    {"login": "cineillojuan", "followers": 154890, "lastGame": "Always On"},
+    {"login": "lajefaok", "followers": 334600, "lastGame": "Just Chatting"},
+    {"login": "toniki", "followers": 317547, "lastGame": "Marvel Rivals"},
+    {"login": "deusamir", "followers": 401946, "lastGame": "Call of Duty: Warzone"},
+    {"login": "getflakked", "followers": 208818, "lastGame": "League of Legends"},
+    {"login": "valorant_la", "followers": 454379, "lastGame": "VALORANT"},
+    {"login": "th3antonio", "followers": 462407, "lastGame": "League of Legends"},
+    {"login": "rubenmartinweb", "followers": 190580, "lastGame": "Sports"},
+    {"login": "el_yuste", "followers": 183432, "lastGame": "Just Chatting"},
+    {"login": "luzu_tv", "followers": 495320, "lastGame": "Talk Shows & Podcasts"},
+    {"login": "sirmaza", "followers": 472463, "lastGame": "VALORANT"},
+    {"login": "warframeinternational", "followers": 234014, "lastGame": "Warframe"},
+    {"login": "skain", "followers": 240862, "lastGame": "Just Chatting"},
+    {"login": "putupau", "followers": 479183, "lastGame": "Just Chatting"},
+    {"login": "nexxuz", "followers": 445680, "lastGame": "Just Chatting"},
+    {"login": "keznit1", "followers": 397553, "lastGame": "VALORANT"},
+    {"login": "koi", "followers": 277126, "lastGame": "Just Chatting"},
+    {"login": "rustyk", "followers": 482847, "lastGame": "Just Chatting"},
+    {"login": "winghaven", "followers": 455108, "lastGame": "Just Chatting"}
+  ],
+  "notes": "Scrape via TwitchTracker pages 1-5 (Spanish language + Counter-Strike 2 game filter). 82 candidates checked via GQL API. 5 with lastGame=Counter-Strike in 100k-500k range.",
+  "candidates_checked": 82,
+  "pages_scraped": 5
+}
