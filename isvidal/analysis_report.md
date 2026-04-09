@@ -13,8 +13,8 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 | Redux | state_data | 5.74 | 28 | 1 | 2025 |
 | useEffect | hooks | 4.07 | 13 | 2 | 2026 |
 | zod | typescript | 4.00 | 4 | 4 | 2026 |
+| shadcn | styling | 3.47 | 5 | 4 | 2026 |
 | Vite | tooling | 3.19 | 6 | 3 | 2026 |
-| shadcdn | styling | 3.12 | 4 | 4 | 2026 |
 | CSS Modules | styling | 3.01 | 5 | 4 | 2025 |
 | TanStack | meta_frameworks | 2.71 | 3 | 3 | 2026 |
 | PHP | backend | 2.29 | 8 | 2 | 2025 |
@@ -57,7 +57,7 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 | Next.js | 1.88 | activo | 2020–2026 |
 | React Router | 0.96 | declinante | 2020–2023 |
 | Gatsby | 0.88 | abandonado | 2020–2020 |
-| Astro | 0.71 | declinante | 2023–2023 |
+| Remix | 0.71 | declinante | 2023–2023 |
 
 ### Typescript
 
@@ -75,8 +75,8 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 |------|-------|-------|-------|
 | Vite | 3.19 | activo | 2021–2026 |
 | monorepo | 0.71 | activo | 2025–2025 |
-| ESLint | 0.12 | abandonado | 2020–2020 |
 | Prettier | 0.12 | abandonado | 2020–2020 |
+| ESLint | 0.12 | abandonado | 2020–2020 |
 
 ### Testing
 
@@ -85,18 +85,12 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 | Jest | 0.12 | abandonado | 2020–2020 |
 | Testing Library | 0.12 | abandonado | 2020–2020 |
 
-### Patterns
-
-| Term | Score | Trend | Years |
-|------|-------|-------|-------|
-| DX | 0.71 | activo | 2025–2025 |
-
 ### Styling
 
 | Term | Score | Trend | Years |
 |------|-------|-------|-------|
 | Tailwind | 10.55 | activo | 2021–2026 |
-| shadcdn | 3.12 | activo | 2025–2026 |
+| shadcn | 3.47 | activo | 2023–2026 |
 | CSS Modules | 3.01 | activo | 2021–2025 |
 | CSS-in-JS | 2.12 | activo | 2025–2025 |
 | Chakra | 1.41 | activo | 2025–2025 |
@@ -138,19 +132,19 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 |------|-------|-----------|----------------|
 | Valtio | state_data | 2022 | 1 |
 | useState | hooks | 2021 | 3 |
-| useRef | hooks | 2021 | 1 |
 | Radix | styling | 2021 | 1 |
+| useRef | hooks | 2021 | 1 |
 | React Native | platforms | 2020 | 9 |
 | Gatsby | meta_frameworks | 2020 | 7 |
 | useReducer | hooks | 2020 | 4 |
-| Django | backend | 2020 | 1 |
-| Jest | testing | 2020 | 1 |
-| ESLint | tooling | 2020 | 1 |
 | Prettier | tooling | 2020 | 1 |
-| Recoil | state_data | 2020 | 1 |
-| Testing Library | testing | 2020 | 1 |
+| Django | backend | 2020 | 1 |
 | type | typescript | 2020 | 1 |
+| ESLint | tooling | 2020 | 1 |
+| Recoil | state_data | 2020 | 1 |
 | useContext | hooks | 2020 | 1 |
+| Jest | testing | 2020 | 1 |
+| Testing Library | testing | 2020 | 1 |
 
 ## Latest Opinion — Top 5 Active Terms
 
@@ -191,8 +185,8 @@ El stack que yo recomiendo: React  + Vite + TypeScript + TailwindCSS (+shadcdn) 
 | 2025 | #1128 | 38 | 148 |  | Mi opinión en 8 años ya de esto es que he tocado todo profesionalmente: CSS a pelo, Bootstrap, CSS-i… |
 | 2025 | #1125 | 38 | 177 |  | no usar tailwind en 2025 es de estar cocido de la cabeza en mi opinión, o mejor dicho, no tener ni i… |
 | 2025 | #1119 | 38 | 155 |  | Tailwind >>>>>>>>>>>>>>> (introduce aqui 2 millones mas) >>>>>>> CSS-Modules >>>>> CSS-IN-JS >>>>>>>… |
-| 2025 | #1068 | 36 | 135 |  | La razón es simple, tienen la mejor DX, y por ende estan en todos lados, millones y millones de line… |
 | 2023 | #870 | 29 | 133 |  | NextJs ahora shippea con dos formas de "routing", ambas file based, pero que la api es muy diferente… |
+| 2025 | #1068 | 36 | 135 |  | La razón es simple, tienen la mejor DX, y por ende estan en todos lados, millones y millones de line… |
 | 2023 | #872 | 30 | 71 |  | Uses nextjs o no, cosas como tailwind, react query o swr, date-fns, clsx y cualquier otra mierda que… |
 | 2025 | #1122 | 38 | 40 | ✓ | className -> "buttons-container gap-4" (gap-4 es una clase de css global -> o en el css en la clase … |
 | 2026 | #1198 | 40 | 52 |  | Si es algo muy basico context te vale. Si crees que vas a necesitar una gestión de estado local algo… |

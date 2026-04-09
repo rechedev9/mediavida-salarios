@@ -12,6 +12,7 @@ Outputs (all to isvidal/):
 """
 import re
 import json
+import sys
 from pathlib import Path
 
 import polars as pl
@@ -44,7 +45,7 @@ TERMS: dict[str, list[str]] = {
         "Jest", "Testing Library",
     ],
     "patterns": [
-        "DX",
+        # DX removed: matches "developer experience" concept, not a tool
     ],
     "styling": [
         "Tailwind", "TailwindCSS", "styled-components",
@@ -104,6 +105,7 @@ TERM_TO_TOPIC: dict[str, str] = {
 # but gets stored under the canonical name ("Tailwind").
 TERM_ALIASES: dict[str, str] = {
     "TailwindCSS": "Tailwind",
+    "shadcdn": "shadcn",  # isvidal's consistent typo for shadcn
 }
 
 
@@ -121,7 +123,9 @@ def load_posts() -> pl.DataFrame:
 # a 2024 mention 0.5, a 2022 mention 0.25, a 2020 mention 0.125.
 # Aligned with frontend churn: old tooling is almost certainly outdated.
 HALF_LIFE_YEARS = 2.0
-RECENT_WINDOW_YEARS = 1  # "recent" = last 2 calendar years (LATEST-1 .. LATEST)
+# Posts with year >= latest_year - RECENT_LOOKBACK_YEARS count as "recent".
+# With value 1, recent = the latest year and the one before it (2 calendar years).
+RECENT_LOOKBACK_YEARS = 1
 
 
 def year_weight(year: int, latest_year: int) -> float:
@@ -188,6 +192,12 @@ def build_term_matrix(df: pl.DataFrame, weights: list[float]) -> pl.DataFrame:
 # ── 3.2  Opinion excerpts ─────────────────────────────────────────────────────
 
 def build_opinion_excerpts(df: pl.DataFrame, weights: list[float]) -> pl.DataFrame:
+    """
+    Extract sentence-level excerpts mentioning each dictionary term.
+    Per (post, term), dedupe excerpts that share the same context window —
+    consecutive sentence matches would otherwise emit overlapping excerpts that
+    double-count the same opinion in stance aggregation.
+    """
     rows = []
     for row_dict, w in zip(df.iter_rows(named=True), weights):
         text = row_dict["texto"] or ""
@@ -195,16 +205,23 @@ def build_opinion_excerpts(df: pl.DataFrame, weights: list[float]) -> pl.DataFra
         year = row_dict["year"]
         post_num = row_dict["post_num"]
         for term, pat in COMPILED.items():
+            term_canon = canonical(term)
+            seen_excerpts: set[str] = set()
             for i, sent in enumerate(sentences):
                 if pat.search(sent):
                     start = max(0, i - 1)
                     end = min(len(sentences), i + 2)
-                    excerpt = " ".join(sentences[start:end])
+                    excerpt = " ".join(sentences[start:end])[:500]
+                    # Dedupe by content prefix (first 200 chars are stable enough)
+                    key = excerpt[:200]
+                    if key in seen_excerpts:
+                        continue
+                    seen_excerpts.add(key)
                     rows.append({
-                        "term": canonical(term),
+                        "term": term_canon,
                         "year": year,
                         "post_num": post_num,
-                        "excerpt": excerpt[:500],
+                        "excerpt": excerpt,
                         "weighted_year": w,
                     })
 
@@ -361,13 +378,15 @@ def apply_stance_cache(
 
     excerpts = excerpts.with_columns(pl.Series("stance", stance_vals))
 
-    # Recency-weighted stance score per term
-    weighted = excerpts.with_columns([
-        pl.col("stance").replace_strict(STANCE_VAL, default=0.0).alias("_sv"),
-        pl.col("year")
-          .map_elements(lambda y: year_weight(int(y), latest_year), return_dtype=pl.Float64)
-          .alias("_yw"),
-    ]).with_columns((pl.col("_sv") * pl.col("_yw")).alias("_wstance"))
+    # Recency-weighted stance score per term — pure native Polars expression
+    # (avoids per-row Python callbacks).
+    year_w_expr = (
+        pl.lit(0.5) ** ((pl.lit(latest_year) - pl.col("year")) / HALF_LIFE_YEARS)
+    )
+    weighted = excerpts.with_columns(
+        (pl.col("stance").replace_strict(STANCE_VAL, default=0.0) * year_w_expr)
+        .alias("_wstance")
+    )
 
     term_stance = (
         weighted
@@ -380,22 +399,21 @@ def apply_stance_cache(
         ])
     )
 
-    def _verdict(row: dict) -> str:
-        score = row["stance_score"]
-        pos = row["positive_excerpts"]
-        neg = row["negative_excerpts"]
-        if score >= 0.5:
-            return "recomienda"
-        if score <= -0.5:
-            return "desaconseja"
-        if pos >= 2 and neg >= 2:
-            return "mixto"
-        return "neutral"
-
+    # Verdict logic — order matters:
+    # 1. mixto FIRST: any term with both ≥2 positive and ≥2 negative excerpts is
+    #    contested, regardless of which side currently wins by score.
+    # 2. desaconseja: strong negative wins (score <= -0.5).
+    # 3. recomienda: strong positive wins (score >= +0.5).
+    # 4. neutral: insufficient signal.
     term_stance = term_stance.with_columns(
-        pl.struct(["stance_score", "positive_excerpts", "negative_excerpts"])
-          .map_elements(_verdict, return_dtype=pl.String)
-          .alias("verdict")
+        pl.when((pl.col("positive_excerpts") >= 2) & (pl.col("negative_excerpts") >= 2))
+        .then(pl.lit("mixto"))
+        .when(pl.col("stance_score") <= -0.5)
+        .then(pl.lit("desaconseja"))
+        .when(pl.col("stance_score") >= 0.5)
+        .then(pl.lit("recomienda"))
+        .otherwise(pl.lit("neutral"))
+        .alias("verdict")
     )
 
     return excerpts, term_stance
@@ -409,7 +427,7 @@ def build_stack_summary(matrix: pl.DataFrame, latest_year: int) -> pl.DataFrame:
             "recent_mentions": pl.Int64, "recent_share": pl.Float64,
             "years_since_last": pl.Int64, "trend": pl.String,
         })
-    recent_cutoff = latest_year - RECENT_WINDOW_YEARS
+    recent_cutoff = latest_year - RECENT_LOOKBACK_YEARS
     base = (
         matrix
         .group_by(["term", "topic"])
@@ -568,6 +586,9 @@ def build_report(
 def main() -> None:
     print("Loading isvidal_posts.parquet …")
     df = load_posts()
+    if df.is_empty():
+        print("ERROR: isvidal_posts.parquet is empty — run filter_isvidal.py first", file=sys.stderr)
+        sys.exit(1)
     latest_year = int(df["year"].max())
     print(f"  {len(df)} posts, years {df['year'].min()}–{latest_year}")
 
@@ -587,8 +608,7 @@ def main() -> None:
 
     print("\n3.2  Building opinion excerpts …")
     excerpts = build_opinion_excerpts(df, weights)
-    excerpts.write_parquet(OUT / "isvidal_opinion_excerpts.parquet")
-    print(f"  {len(excerpts)} rows → isvidal_opinion_excerpts.parquet")
+    print(f"  {len(excerpts)} rows (pre-stance)")
 
     print("\n3.3  Building code-block features …")
     code_features = build_code_features(df)
@@ -600,11 +620,14 @@ def main() -> None:
     top_posts.write_parquet(OUT / "isvidal_top_posts.parquet")
     print(f"  {len(top_posts)} rows → isvidal_top_posts.parquet")
 
-    print("\n3.5  Building stack summary …")
+    print("\n3.5  Building stack summary + stance merge …")
     summary = build_stack_summary(matrix, latest_year)
-    # Apply cached stance classifications (if available) and add verdict cols
+    # Apply cached stance classifications (if available), add verdict cols.
+    # opinion_excerpts is written ONCE here, with stance, to avoid leaving a
+    # stale parquet on disk if anything between the writes raises.
     excerpts_with_stance, term_stance = apply_stance_cache(excerpts, latest_year)
     excerpts_with_stance.write_parquet(OUT / "isvidal_opinion_excerpts.parquet")
+    print(f"  {len(excerpts_with_stance)} rows → isvidal_opinion_excerpts.parquet")
     summary = summary.join(term_stance, on="term", how="left").with_columns([
         pl.col("positive_excerpts").fill_null(0),
         pl.col("negative_excerpts").fill_null(0),
@@ -618,7 +641,7 @@ def main() -> None:
         print(f"  stance cache applied: {len(summary.filter(pl.col('verdict') != 'neutral'))} terms classified")
 
     print("\n3.6  Writing analysis_report.md …")
-    report = build_report(df, matrix, summary, excerpts, top_posts, latest_year)
+    report = build_report(df, matrix, summary, excerpts_with_stance, top_posts, latest_year)
     (OUT / "analysis_report.md").write_text(report, encoding="utf-8")
     print("  analysis_report.md written")
 

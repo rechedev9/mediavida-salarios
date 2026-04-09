@@ -72,22 +72,36 @@ st.set_page_config(
 )
 
 
+def _path_with_mtime(path: Path) -> tuple[str, float]:
+    """Cache key that invalidates when the underlying parquet is rewritten."""
+    return (str(path), path.stat().st_mtime if path.exists() else 0.0)
+
+
 @st.cache_data
-def load(path: Path) -> pl.DataFrame | None:
+def load(path_key: tuple[str, float]) -> pl.DataFrame | None:
+    path = Path(path_key[0])
     if not path.exists():
         return None
     return pl.read_parquet(path)
 
 
-posts = load(POSTS_PATH)
-term_matrix = load(TERM_MATRIX_PATH)
-opinion = load(OPINION_PATH)
-code_features = load(CODE_FEATURES_PATH)
-top_posts = load(TOP_POSTS_PATH)
-stack_summary = load(STACK_SUMMARY_PATH)
+posts = load(_path_with_mtime(POSTS_PATH))
+term_matrix = load(_path_with_mtime(TERM_MATRIX_PATH))
+opinion = load(_path_with_mtime(OPINION_PATH))
+code_features = load(_path_with_mtime(CODE_FEATURES_PATH))
+top_posts = load(_path_with_mtime(TOP_POSTS_PATH))
+stack_summary = load(_path_with_mtime(STACK_SUMMARY_PATH))
 
-latest_year = int(posts["year"].max()) if posts is not None else 2026
-earliest_year = int(posts["year"].min()) if posts is not None else 2020
+# Empty-df guard: avoid int(None) crashes when running against a fresh checkout
+def _safe_year(df: pl.DataFrame | None, fn, default: int) -> int:
+    if df is None or df.is_empty():
+        return default
+    val = fn(df["year"])
+    return int(val) if val is not None else default
+
+
+latest_year = _safe_year(posts, lambda c: c.max(), 2026)
+earliest_year = _safe_year(posts, lambda c: c.min(), 2020)
 
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
 
@@ -235,6 +249,32 @@ if stack_summary is not None:
             st.plotly_chart(fig_des, use_container_width=True)
         else:
             st.info("Ningún término desaconsejado con los filtros actuales.")
+
+    # Mixto callout — terms with both ≥2 positive and ≥2 negative excerpts.
+    # These don't fit either column but are conceptually important: contested
+    # opinions where the author has shifted stance over time.
+    mixto = (
+        filtered
+        .filter(pl.col("verdict") == "mixto")
+        .sort("weighted_score", descending=True)
+        .to_pandas()
+    )
+    if len(mixto) > 0:
+        chips = []
+        for _, row in mixto.iterrows():
+            chips.append(
+                f"<span style='display:inline-block; background:#fef3c7; "
+                f"border:1px solid #d97706; border-radius:12px; padding:2px 10px; "
+                f"margin:2px 4px; font-size:0.9em;'>"
+                f"<strong>{row['term']}</strong> · "
+                f"{row['positive_excerpts']}➕ / {row['negative_excerpts']}➖"
+                f"</span>"
+            )
+        st.markdown(
+            "**🔀 Mixto** — opiniones contradictorias (al menos 2 positivas y 2 negativas):  "
+            + " ".join(chips),
+            unsafe_allow_html=True,
+        )
 else:
     st.info("Sin datos — ejecuta `python isvidal/analyze_isvidal.py`.")
 

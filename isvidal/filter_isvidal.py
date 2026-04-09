@@ -33,10 +33,19 @@ def word_count(text: str) -> int:
     return len(text.split()) if text else 0
 
 
+def _post_has_valid_dates(p: dict) -> bool:
+    """Skip posts where the scraper produced null timestamp or fecha_iso."""
+    return p.get("timestamp") is not None and p.get("fecha_iso") is not None
+
+
 def build_isvidal_posts(posts: list[dict], num_to_author: dict) -> list[dict]:
     rows = []
+    skipped = 0
     for p in posts:
         if p["autor"] != AUTHOR:
+            continue
+        if not _post_has_valid_dates(p):
+            skipped += 1
             continue
 
         # Authors that isvidal quoted in this post
@@ -63,7 +72,8 @@ def build_isvidal_posts(posts: list[dict], num_to_author: dict) -> list[dict]:
             }
         )
 
-    # Sort ascending by timestamp
+    if skipped:
+        print(f"  WARN: skipped {skipped} isvidal posts with null timestamps", file=sys.stderr)
     rows.sort(key=lambda r: r["timestamp"])
     return rows
 
@@ -71,6 +81,7 @@ def build_isvidal_posts(posts: list[dict], num_to_author: dict) -> list[dict]:
 def build_context_posts(posts: list[dict], isvidal_post_nums: set) -> list[dict]:
     """Non-isvidal posts that quote at least one isvidal post."""
     rows = []
+    skipped = 0
     for p in posts:
         if p["autor"] == AUTHOR:
             continue
@@ -80,6 +91,9 @@ def build_context_posts(posts: list[dict], isvidal_post_nums: set) -> list[dict]
             if q["ref_num"] in isvidal_post_nums
         ]
         if not quoting_nums:
+            continue
+        if not _post_has_valid_dates(p):
+            skipped += 1
             continue
         wc = word_count(p["texto"])
         rows.append(
@@ -99,6 +113,8 @@ def build_context_posts(posts: list[dict], isvidal_post_nums: set) -> list[dict]
                 "quoting_isvidal_post_nums": quoting_nums,
             }
         )
+    if skipped:
+        print(f"  WARN: skipped {skipped} context posts with null timestamps", file=sys.stderr)
     rows.sort(key=lambda r: r["timestamp"])
     return rows
 
