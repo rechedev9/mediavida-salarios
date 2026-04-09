@@ -51,7 +51,8 @@ Los posts `#2659`, `#2662`, `#2671` de `isvidal` en MediaVida establecen:
 |---|---|---|
 | Fase 0 — Scaffolding | `roadmap.md` + `log.md` | ✅ 2026-04-09 |
 | Fase 1 — Briefing ejecutivo | `briefing.md` | ✅ 2026-04-09 |
-| Fase 2 — W1 Legal/fiscal | `legal.md` | ⏳ pendiente (Checkpoint 1 primero) |
+| Fase 2 — W1 Legal/fiscal | `legal.md` | ✅ 2026-04-09 |
+| Fase 3 — W2 Setup operacional | `setup.md` | ⏳ pendiente |
 
 ---
 
