@@ -195,24 +195,27 @@ st.markdown(
 c_yes, c_no = st.columns(2)
 
 with c_yes:
+    st.markdown("#### ✅ El stack")
     st.markdown(
         """
-        #### ✅ El stack
-
-        | Capa | Elección |
-        |---|---|
-        | **Framework** | [React](https://react.dev) |
-        | **Build / dev server** | [Vite](https://vite.dev) |
-        | **Lenguaje** | [TypeScript](https://www.typescriptlang.org/docs/) (`strict: true`) |
-        | **Routing** | [TanStack Router](https://tanstack.com/router/latest) |
-        | **Data fetching** | [React Query](https://tanstack.com/query/latest) + `fetch` nativo |
-        | **Styling** | [Tailwind CSS](https://tailwindcss.com/docs) + [shadcn/ui](https://ui.shadcn.com) |
-        | **Validación + tipos** | [Zod](https://zod.dev) (source of truth) |
-        | **Formularios** | [React Hook Form](https://react-hook-form.com) + Zod |
-        | **Tablas** | [TanStack Table](https://tanstack.com/table/latest) |
-        | **API types** | Generados de [OpenAPI](https://openapi-ts.dev) (`npm run api:types`) |
-        | **Estado local** | URL → [Nuqs](https://nuqs.47ng.com) → Context → [Zustand](https://zustand.docs.pmnd.rs) (edge case) |
-        """
+<table>
+<thead><tr><th>Capa</th><th>Elección</th></tr></thead>
+<tbody>
+<tr><td><strong>Framework</strong></td><td><a href="https://react.dev" target="_blank">React</a></td></tr>
+<tr><td><strong>Build / dev server</strong></td><td><a href="https://vite.dev" target="_blank">Vite</a></td></tr>
+<tr><td><strong>Lenguaje</strong></td><td><a href="https://www.typescriptlang.org/docs/" target="_blank">TypeScript</a> (<code>strict: true</code>)</td></tr>
+<tr><td><strong>Routing</strong></td><td><a href="https://tanstack.com/router/latest" target="_blank">TanStack Router</a></td></tr>
+<tr><td><strong>Data fetching</strong></td><td><a href="https://tanstack.com/query/latest" target="_blank">React Query</a> + <code>fetch</code> nativo</td></tr>
+<tr><td><strong>Styling</strong></td><td><a href="https://tailwindcss.com/docs" target="_blank">Tailwind CSS</a> + <a href="https://ui.shadcn.com" target="_blank">shadcn/ui</a></td></tr>
+<tr><td><strong>Validación + tipos</strong></td><td><a href="https://zod.dev" target="_blank">Zod</a> (source of truth)</td></tr>
+<tr><td><strong>Formularios</strong></td><td><a href="https://react-hook-form.com" target="_blank">React Hook Form</a> + Zod</td></tr>
+<tr><td><strong>Tablas</strong></td><td><a href="https://tanstack.com/table/latest" target="_blank">TanStack Table</a></td></tr>
+<tr><td><strong>API types</strong></td><td>Generados de <a href="https://openapi-ts.dev" target="_blank">OpenAPI</a> (<code>npm run api:types</code>)</td></tr>
+<tr><td><strong>Estado local</strong></td><td>URL → <a href="https://nuqs.47ng.com" target="_blank">Nuqs</a> → Context → <a href="https://zustand.docs.pmnd.rs" target="_blank">Zustand</a> (edge case)</td></tr>
+</tbody>
+</table>
+        """,
+        unsafe_allow_html=True,
     )
 
 with c_no:
