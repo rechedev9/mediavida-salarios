@@ -20,6 +20,7 @@
 11. [Plan de ejecución](#11-plan-de-ejecución)
 12. [Preparación de entrevista técnica](#12-preparación-de-entrevista-técnica)
 13. [Oportunidad de nicho — AI Tooling y MCP](#13-oportunidad-de-nicho--ai-tooling-y-mcp)
+14. [Conclusiones](#14-conclusiones)
 
 ---
 
@@ -778,4 +779,113 @@ Además de los canales genéricos, estos son específicos para posiciones Go:
 
 ---
 
-*Investigación realizada en abril 2026. Fuentes: AEAT sede electrónica, Seguridad Social, Infoautónomos, Holded, taxdown.es, index.dev European Developer Rates 2026, IT Jobs Watch UK, remotepass.com, riseworks.io, posts #2659 #2662 #2671 de isvidal en MediaVida, github.com/rechedev9, Malt barómetro España (malt.es/t/barometro-tarifas, abril 2026), Malt barómetro Francia (malt.fr/t/barometre-tarifs, abril 2026), GolangProjects, a16z MCP deep dive, Gartner MCP forecast 2026.*
+## 14. Conclusiones
+
+### Lo que dicen los datos reales de Malt
+
+La fuente más fiable para rates en Europa son los barómetros de Malt (datos en tiempo real, abril 2026), no los benchmarks de informes de terceros. Lo que muestran para tu perfil:
+
+**La brecha España/Francia es el argumento central para buscar cliente extranjero:**
+
+| Perfil | Malt España 0-2 años | Malt Francia 0-2 años | Diferencia |
+|---|---|---|---|
+| Backend general | €175/día | €313/día | +79% |
+| ReactJS | €189/día | €302/día | +60% |
+| Experimentado (media) | €300-334/día | €561-563/día | +67-87% |
+
+El mismo trabajo, en el mismo idioma (inglés), facturado a un cliente francés en lugar de español: +60-80% de ingresos. Esa es la matemática del modelo contractor.
+
+**Tu portfolio te sube de tramo en Malt Francia:** con 2 años de experiencia en papel pero `riskforge` en el portfolio, te posicionas en la zona "3-7 años" francesa (€426/día de media) en lugar de "0-2 años" (€313/día). El portfolio compensa la falta de años nominales.
+
+**Perfiles Go observados directamente en Malt Francia:**
+- Tech lead Go + DevOps + Cloud: **€750/día** (41 reviews)
+- Fullstack Go + React: **€382/día** (8 reviews — comparable a tu entry point)
+
+Go no tiene categoría propia en el barómetro — aparece bajo "Backend" o "Fullstack". Los perfiles con Go listado explícitamente cobran 10-30% sobre la media de backend de su tramo.
+
+---
+
+### El stack que más renta para tu situación específica
+
+Con 2 años, inglés perfecto y el portfolio que tienes, el orden de prioridad óptimo es:
+
+1. **Go backend** (anchor: `riskforge`) — menor competencia, rates superiores, `riskforge` es el argumento concreto para convencer a un hiring manager de que llevas 2 años pero piensas como senior. El nicho fintech/insurtech en FR/DE/UK paga el premium más alto.
+
+2. **Next.js fullstack** (anchor: `nextrespawn` + `gravity-room`) — más demanda, más fácil de vender, pero más competencia. Next.js 16 + App Router + React 19 te diferencia de seniors desactualizados en el Pages Router.
+
+3. **AI tooling / MCP** (anchor: `tealium-mcp-server`) — nicho emergente con oferta escasa. Rates 20-40% superiores al backend genérico cuando encuentras el cliente AI-native. No para el primer contrato, sí para mencionar en conversaciones y como diferenciador en LinkedIn.
+
+---
+
+### Preparación de entrevista — síntesis de lo crítico
+
+Para que el primer contrato lleve rate de "3-7 años" en lugar de "0-2 años", hay que pasar las entrevistas en ese nivel. Los puntos donde `riskforge` te da ventaja directa:
+
+**Go (lo que preguntarán con tu CV):**
+- Fan-out paralelo: cómo lanzas N goroutines y recoges resultados — ya lo tienes implementado.
+- Hedging adaptativo: calculaste p95 con EMA para detectar carriers lentos — explícalo con código real.
+- Circuit breakers: tres estados, transiciones, reset automático — explícalo con lo que hiciste.
+- Context: cómo propagas cancelación a través de la cadena de goroutines del fan-out.
+
+Prepara la narrativa de `riskforge` en 3-4 minutos: qué problema resuelve, cómo funciona el fan-out, por qué el hedging, qué aprendiste. Esa narración vale más que 20 respuestas teóricas.
+
+**Next.js (lo que diferencia del resto):**
+- Server Components vs Client Components: cuándo cada uno y por qué — la mayoría lo confunde.
+- Streaming con Suspense: cómo reduce el TTFB percibido.
+- Auth.js v5 con edge runtime: lo tienes en `nextrespawn` — es bleeding edge en 2026.
+
+---
+
+### Correcciones urgentes del GitHub antes de aplicar
+
+El GitHub es el primer sitio que visita un hiring manager. Estos problemas específicos dañan la primera impresión:
+
+1. **10 repos sin descripción** — sin una línea descriptiva, el perfil parece descuidado.
+2. **`gravity-room` tiene boilerplate de Next.js pegado** al final del README — eliminar.
+3. **Profile README** (`rechedev9`) — necesita un pitch de 3-4 líneas con stack y disponibilidad.
+4. **Repos pinados** — actualmente cualquiera puede ver primero repos irrelevantes. Pinear: `riskforge`, `gravity-room`, `nextrespawn`, `recon-cli`, `tealium-mcp-server`, `portfolio`.
+
+Ninguna de estas correcciones requiere escribir código — solo texto. Son la inversión de menor coste y mayor retorno antes de enviar la primera candidatura.
+
+---
+
+### El primer mes — qué hacer en qué orden
+
+```
+Esta semana:
+├── Arreglar GitHub (descriptions, pins, profile README, gravity-room)
+├── Contratar gestoría (llamar a 2-3 con el checklist de preguntas)
+└── Abrir Wise Business
+
+Semana 2:
+├── Modelo 036 + alta RETA (tarifa plana 80€/mes)
+├── Crear perfil Malt con rate €300-320/día
+└── Activar LinkedIn "Open to Contract"
+
+Semana 3-4:
+├── Candidaturas activas: Malt FR, LinkedIn, HN Who is Hiring (1 mayo)
+└── Preparar pitch narrativo de riskforge (3-4 minutos, en inglés)
+
+Objetivo realista:
+└── Primer contrato firmado entre semana 6 y semana 12 desde las primeras candidaturas
+```
+
+---
+
+### Los números finales
+
+Con el primer contrato en zona **€300-380/día**, 200 días facturables al año:
+
+| Escenario | Facturación | Gastos deducibles | Neto IRPF | IRPF Madrid | **Neto en mano** |
+|---|---|---|---|---|---|
+| **Conservative** (€300/día) | €60.000 | ~€7.000 | ~€53.000 | ~€14.500 | **~€38.500** |
+| **Base** (€340/día) | €68.000 | ~€7.000 | ~€61.000 | ~€18.000 | **~€43.000** |
+| **Optimista** (€380/día) | €76.000 | ~€7.500 | ~€68.500 | ~€21.000 | **~€47.500** |
+
+Año 2 con referencia y rate €450/día × 210 días → neto en mano ~€65.000.
+
+Para comparación: el salario neto mediano de un programador con 2 años en España según el hilo de MediaVida (231 registros, mediana €38.711 bruto €2026) es ~€28.000-30.000 netos. El modelo contractor duplica eso desde el primer año si consigues el primer contrato.
+
+---
+
+*Investigación realizada en abril 2026. Fuentes: AEAT sede electrónica, Seguridad Social, Infoautónomos, Holded, taxdown.es, index.dev European Developer Rates 2026, IT Jobs Watch UK, remotepass.com, riseworks.io, posts #2659 #2662 #2671 de isvidal en MediaVida, github.com/rechedev9, Malt barómetro España (malt.es/t/barometro-tarifas, abril 2026), Malt barómetro Francia (malt.fr/t/barometre-tarifs, abril 2026), GolangProjects, a16z MCP deep dive, Gartner MCP forecast 2026, tabla salarial MediaVida scrapper/salarios_tabla.parquet.*
