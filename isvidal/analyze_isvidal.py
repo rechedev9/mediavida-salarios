@@ -19,44 +19,73 @@ import polars as pl
 OUT = Path(__file__).parent
 
 # ── Term dictionary ────────────────────────────────────────────────────────────
+# Dead terms (0 hits) removed. New topics added after gap analysis on
+# isvidal's actual corpus: styling, data_api, platforms, backend, utils.
 TERMS: dict[str, list[str]] = {
     "hooks": [
         "useEffect", "useState", "useMemo", "useCallback", "useRef",
-        "useContext", "useReducer", "useTransition", "useDeferredValue",
-        "Suspense", "ErrorBoundary",
+        "useContext", "useReducer", "Suspense",
     ],
     "state_data": [
-        "Redux", "Zustand", "Jotai", "Recoil", "MobX",
-        "React Query", "SWR", "TanStack", "Context API",
+        "Redux", "Zustand", "Recoil", "React Query", "SWR",
+        "Nuqs", "Valtio",
     ],
     "meta_frameworks": [
-        "Next.js", "Remix", "Gatsby", "Astro", "RSC",
-        "App Router", "Pages Router", "server components", "server actions",
+        "Next.js", "Remix", "Gatsby", "Astro",
+        "TanStack", "React Router",
     ],
     "typescript": [
-        "strict", "generics", "zod", "io-ts", "any", "unknown",
-        "type", "interface", "satisfies", "as const",
+        "TypeScript", "strict", "zod", "any", "type",
     ],
     "tooling": [
-        "Webpack", "Vite", "Turbopack", "Rollup", "esbuild",
-        "Babel", "SWC", "pnpm", "monorepo", "turborepo",
+        "Vite", "monorepo", "Prettier", "ESLint", "Biome",
     ],
     "testing": [
-        "Jest", "Vitest", "RTL", "Testing Library",
-        "Cypress", "Playwright", "MSW",
+        "Jest", "Testing Library",
     ],
     "patterns": [
-        "composition", "hooks pattern", "render props", "HOC",
-        "compound component", "colocation", "DX", "DRY", "YAGNI", "abstraction",
+        "DX",
+    ],
+    "styling": [
+        "Tailwind", "TailwindCSS", "styled-components",
+        "CSS Modules", "CSS-in-JS", "shadcn", "shadcdn",
+        "Radix", "Chakra", "MUI",
+    ],
+    "data_api": [
+        "axios", "fetch", "tRPC", "GraphQL",
+        "REST", "OpenAPI", "Prisma", "Supabase",
+    ],
+    "platforms": [
+        "React Native", "Expo",
+        "Vercel", "Netlify", "Cloudflare",
+    ],
+    "backend": [
+        "PHP", "Node.js", "Bun", "Deno",
+        "Django", "Laravel", "Express",
+    ],
+    "utils": [
+        "date-fns", "clsx", "Framer Motion",
     ],
 }
 
 
 def _compile(term: str) -> re.Pattern:
-    escaped = re.escape(term)
+    """
+    Build a case-insensitive regex that tolerates common forum writing variants:
+    - "React Router" matches "React Router" AND "react-router"
+    - "Node.js" matches "Node.js" AND "node.js"
+    - Single alphanumeric words use word boundaries to prevent partial matches
+    """
+    # Multi-word terms: allow whitespace OR hyphen as the separator
+    if " " in term:
+        parts = [re.escape(p) for p in term.split(" ")]
+        pattern = r"\b" + r"[\s-]+".join(parts) + r"\b"
+        return re.compile(pattern, re.IGNORECASE)
+    # Single alphanumeric token: word boundaries on both sides
     if re.fullmatch(r"[A-Za-z0-9_]+", term):
-        return re.compile(r"\b" + escaped + r"\b", re.IGNORECASE)
-    return re.compile(escaped, re.IGNORECASE)
+        return re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE)
+    # Anything else (dotted names, slashes, etc.): literal escape, no boundaries
+    return re.compile(re.escape(term), re.IGNORECASE)
 
 
 COMPILED: dict[str, re.Pattern] = {
@@ -69,6 +98,17 @@ TERM_TO_TOPIC: dict[str, str] = {
     for topic, terms in TERMS.items()
     for term in terms
 }
+
+# Canonicalize variant spellings into a single term to avoid splitting scores.
+# The dictionary term still matches via regex (so "TailwindCSS" is detected)
+# but gets stored under the canonical name ("Tailwind").
+TERM_ALIASES: dict[str, str] = {
+    "TailwindCSS": "Tailwind",
+}
+
+
+def canonical(term: str) -> str:
+    return TERM_ALIASES.get(term, term)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -122,7 +162,7 @@ def build_term_matrix(df: pl.DataFrame, weights: list[float]) -> pl.DataFrame:
             if count > 0:
                 rows.append({
                     "year": year,
-                    "term": term,
+                    "term": canonical(term),
                     "topic": TERM_TO_TOPIC[term],
                     "raw_count": count,
                     "weighted_count": count * w,
@@ -161,7 +201,7 @@ def build_opinion_excerpts(df: pl.DataFrame, weights: list[float]) -> pl.DataFra
                     end = min(len(sentences), i + 2)
                     excerpt = " ".join(sentences[start:end])
                     rows.append({
-                        "term": term,
+                        "term": canonical(term),
                         "year": year,
                         "post_num": post_num,
                         "excerpt": excerpt[:500],
@@ -240,16 +280,126 @@ def build_code_features(df: pl.DataFrame) -> pl.DataFrame:
 # ── 3.4  Top posts ────────────────────────────────────────────────────────────
 
 def build_top_posts(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Posts técnicos densos del último 30% del timeline.
+    Filtro: ≥2 hits del diccionario O has_code. Sort por densidad técnica.
+    Excluye el post #1 (índice/glosario del hilo, no opinión).
+    """
     n = len(df)
     cutoff_idx = int(n * 0.70)
-    recent = df[cutoff_idx:]
+    recent = df[cutoff_idx:].filter(pl.col("post_num") != 1)
+
+    # Count term hits per post (tech density)
+    tech_density = []
+    for row in recent.iter_rows(named=True):
+        text = post_searchable_text(row)
+        hits = sum(1 for pat in COMPILED.values() if pat.search(text))
+        tech_density.append(hits)
+
+    recent = recent.with_columns(pl.Series("tech_density", tech_density))
     filtered = recent.filter(
-        (pl.col("word_count") >= 100) | pl.col("has_code")
+        (pl.col("tech_density") >= 2) | pl.col("has_code")
     )
-    return filtered.sort("word_count", descending=True).head(30)
+    # Composite score: term hits are the main signal, code adds 5, words add /20
+    return (
+        filtered
+        .with_columns(
+            (
+                pl.col("tech_density")
+                + pl.col("has_code").cast(pl.Int64) * 5
+                + pl.col("word_count") / 20
+            ).alias("_score")
+        )
+        .sort("_score", descending=True)
+        .drop("_score")
+        .head(30)
+    )
 
 
 # ── 3.5  Stack summary ────────────────────────────────────────────────────────
+
+# ── Stance merge (Phase 5) ────────────────────────────────────────────────────
+
+STANCE_VAL = {"positivo": 1.0, "negativo": -1.0, "neutral": 0.0}
+STANCE_CACHE = OUT / "stance_cache.json"
+
+
+def _cache_key(term: str, post_num: int, excerpt: str) -> str:
+    return f"{term}|{post_num}|{excerpt[:150]}"
+
+
+def _content_key(post_num: int, excerpt: str) -> str:
+    """Term-agnostic key so canonicalization doesn't invalidate cached stances."""
+    return f"{post_num}|{excerpt[:150]}"
+
+
+def apply_stance_cache(
+    excerpts: pl.DataFrame, latest_year: int
+) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """
+    Attach stance from cache (if present) and compute per-term stance summary.
+    Returns (excerpts_with_stance, term_stance_summary).
+
+    Lookup order: full key (term|post_num|excerpt) → content-only fallback
+    (post_num|excerpt) → "neutral". The content-only fallback is critical so
+    that renaming a term (e.g., TailwindCSS → Tailwind via TERM_ALIASES) does
+    not erase its prior classification.
+    """
+    if not STANCE_CACHE.exists() or excerpts.is_empty():
+        stance_vals = ["neutral"] * len(excerpts)
+    else:
+        with open(STANCE_CACHE, encoding="utf-8") as f:
+            cache = json.load(f)
+
+        def lookup(row):
+            full = _cache_key(row["term"], row["post_num"], row["excerpt"])
+            if full in cache:
+                return cache[full]
+            return cache.get(_content_key(row["post_num"], row["excerpt"]), "neutral")
+
+        stance_vals = [lookup(r) for r in excerpts.iter_rows(named=True)]
+
+    excerpts = excerpts.with_columns(pl.Series("stance", stance_vals))
+
+    # Recency-weighted stance score per term
+    weighted = excerpts.with_columns([
+        pl.col("stance").replace_strict(STANCE_VAL, default=0.0).alias("_sv"),
+        pl.col("year")
+          .map_elements(lambda y: year_weight(int(y), latest_year), return_dtype=pl.Float64)
+          .alias("_yw"),
+    ]).with_columns((pl.col("_sv") * pl.col("_yw")).alias("_wstance"))
+
+    term_stance = (
+        weighted
+        .group_by("term")
+        .agg([
+            pl.col("_wstance").sum().alias("stance_score"),
+            pl.col("stance").filter(pl.col("stance") == "positivo").len().alias("positive_excerpts"),
+            pl.col("stance").filter(pl.col("stance") == "negativo").len().alias("negative_excerpts"),
+            pl.col("stance").filter(pl.col("stance") == "neutral").len().alias("neutral_excerpts"),
+        ])
+    )
+
+    def _verdict(row: dict) -> str:
+        score = row["stance_score"]
+        pos = row["positive_excerpts"]
+        neg = row["negative_excerpts"]
+        if score >= 0.5:
+            return "recomienda"
+        if score <= -0.5:
+            return "desaconseja"
+        if pos >= 2 and neg >= 2:
+            return "mixto"
+        return "neutral"
+
+    term_stance = term_stance.with_columns(
+        pl.struct(["stance_score", "positive_excerpts", "negative_excerpts"])
+          .map_elements(_verdict, return_dtype=pl.String)
+          .alias("verdict")
+    )
+
+    return excerpts, term_stance
+
 
 def build_stack_summary(matrix: pl.DataFrame, latest_year: int) -> pl.DataFrame:
     if matrix.is_empty():
@@ -452,8 +602,20 @@ def main() -> None:
 
     print("\n3.5  Building stack summary …")
     summary = build_stack_summary(matrix, latest_year)
+    # Apply cached stance classifications (if available) and add verdict cols
+    excerpts_with_stance, term_stance = apply_stance_cache(excerpts, latest_year)
+    excerpts_with_stance.write_parquet(OUT / "isvidal_opinion_excerpts.parquet")
+    summary = summary.join(term_stance, on="term", how="left").with_columns([
+        pl.col("positive_excerpts").fill_null(0),
+        pl.col("negative_excerpts").fill_null(0),
+        pl.col("neutral_excerpts").fill_null(0),
+        pl.col("stance_score").fill_null(0.0),
+        pl.col("verdict").fill_null("neutral"),
+    ])
     summary.write_parquet(OUT / "isvidal_stack_summary.parquet")
     print(f"  {len(summary)} rows → isvidal_stack_summary.parquet")
+    if STANCE_CACHE.exists():
+        print(f"  stance cache applied: {len(summary.filter(pl.col('verdict') != 'neutral'))} terms classified")
 
     print("\n3.6  Writing analysis_report.md …")
     report = build_report(df, matrix, summary, excerpts, top_posts, latest_year)

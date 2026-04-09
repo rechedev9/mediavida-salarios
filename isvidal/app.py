@@ -1,8 +1,9 @@
 """
 isvidal — conclusiones técnicas sobre su stack (Streamlit dashboard).
 
-Carga los parquets generados por analyze_isvidal.py (Fase 3).
-Cada sección degrada con un info si falta su fuente de datos.
+Carga los parquets generados por analyze_isvidal.py (Fase 3) con clasificación
+de stance cached en `stance_cache.json`. Cada sección degrada con un info si
+falta su fuente de datos.
 
 Fuente: mediavida.com/foro/dev/react-hilo-general-libreria-para-atraerlos-atarlos-todos-657749
 """
@@ -23,7 +24,6 @@ CODE_FEATURES_PATH = BASE / "isvidal_code_features.parquet"
 TOP_POSTS_PATH = BASE / "isvidal_top_posts.parquet"
 STACK_SUMMARY_PATH = BASE / "isvidal_stack_summary.parquet"
 
-TOPIC_KEYS = ["hooks", "state_data", "meta_frameworks", "typescript", "tooling", "testing", "patterns"]
 TOPIC_LABELS = {
     "hooks": "Hooks",
     "state_data": "Estado / datos",
@@ -32,16 +32,37 @@ TOPIC_LABELS = {
     "tooling": "Build / tooling",
     "testing": "Testing",
     "patterns": "Patrones",
+    "styling": "Styling / UI",
+    "data_api": "Data / API",
+    "platforms": "Platforms",
+    "backend": "Backend",
+    "utils": "Utils",
 }
+
 TREND_LABELS = {
     "activo": "🟢 Activo",
     "declinante": "🟡 Declinante",
     "abandonado": "🔴 Abandonado",
 }
-TREND_COLORS = {
-    "activo": "#16a34a",
-    "declinante": "#ca8a04",
-    "abandonado": "#dc2626",
+
+VERDICT_LABELS = {
+    "recomienda": "✅ Recomienda",
+    "desaconseja": "❌ Desaconseja",
+    "mixto": "🔀 Mixto",
+    "neutral": "➖ Neutral",
+}
+
+VERDICT_COLORS = {
+    "recomienda": "#16a34a",
+    "desaconseja": "#dc2626",
+    "mixto": "#d97706",
+    "neutral": "#6b7280",
+}
+
+STANCE_STYLE = {
+    "positivo": ("#16a34a", "#f0fdf4"),
+    "negativo": ("#dc2626", "#fef2f2"),
+    "neutral":  ("#6b7280", "#f9fafb"),
 }
 
 st.set_page_config(
@@ -66,6 +87,7 @@ top_posts = load(TOP_POSTS_PATH)
 stack_summary = load(STACK_SUMMARY_PATH)
 
 latest_year = int(posts["year"].max()) if posts is not None else 2026
+earliest_year = int(posts["year"].min()) if posts is not None else 2020
 
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
 
@@ -77,162 +99,225 @@ topic_sel_labels = st.sidebar.multiselect(
     default=list(TOPIC_LABELS.values()),
     placeholder="Todas",
 )
-label_to_key = {v: k for k, v in TOPIC_LABELS.items()}
-topic_sel = [label_to_key[lbl] for lbl in topic_sel_labels]
+label_to_topic = {v: k for k, v in TOPIC_LABELS.items()}
+topic_sel = [label_to_topic[lbl] for lbl in topic_sel_labels]
+
+verdict_sel_labels = st.sidebar.multiselect(
+    "Verdict",
+    options=list(VERDICT_LABELS.values()),
+    default=list(VERDICT_LABELS.values()),
+    placeholder="Todos",
+)
+label_to_verdict = {v: k for k, v in VERDICT_LABELS.items()}
+verdict_sel = [label_to_verdict[lbl] for lbl in verdict_sel_labels]
 
 trend_sel_labels = st.sidebar.multiselect(
-    "Tendencia",
+    "Tendencia temporal",
     options=list(TREND_LABELS.values()),
-    default=[TREND_LABELS["activo"]],  # default: only show what he still uses
+    default=[TREND_LABELS["activo"]],
     placeholder="Todas",
 )
 label_to_trend = {v: k for k, v in TREND_LABELS.items()}
 trend_sel = [label_to_trend[lbl] for lbl in trend_sel_labels]
 
-year_min_default = 2020
-year_max_default = latest_year
-if posts is not None:
-    year_min_default = int(posts["year"].min())
 year_range = st.sidebar.slider(
     "Años (heatmap histórico)",
-    year_min_default,
-    year_max_default,
-    (year_min_default, year_max_default),
+    earliest_year,
+    latest_year,
+    (earliest_year, latest_year),
 )
 
 st.sidebar.markdown("---")
 st.sidebar.caption(
-    f"**Ponderación por recencia:** decaimiento exponencial con half-life 2 años. "
+    f"**Recencia:** decaimiento exponencial, half-life 2 años. "
     f"Un post de {latest_year - 4} pesa 0.25× uno de {latest_year}."
 )
 st.sidebar.caption(
-    "**Limitación:** el conteo de menciones es neutral — una mención puede ser "
-    "recomendación o crítica. Usar 'Últimas palabras' para ver contexto."
+    "**Verdict:** agregado desde excerpts clasificados con stance (positivo/negativo/neutral). "
+    "Ponderado por recencia: una mención reciente negativa vence a muchas positivas antiguas."
 )
 
 # ─── Header ──────────────────────────────────────────────────────────────────
 
 st.title("isvidal — conclusiones técnicas")
 st.caption(
-    "Evolución de su uso de tools, libs y frameworks. Los valores recientes pesan más "
-    f"por decaimiento exponencial (half-life 2 años). Ventana: **{year_min_default}–{latest_year}**. "
+    f"Qué recomienda y desaconseja ahora mismo sobre frontend/JS/TS. "
+    f"Ventana: **{earliest_year}–{latest_year}** · 199 posts analizados · "
+    "200 excerpts clasificados por stance con Haiku + revisión manual. "
     "Fuente: [React hilo general — MediaVida]"
     "(https://www.mediavida.com/foro/dev/"
     "react-hilo-general-libreria-para-atraerlos-atarlos-todos-657749)"
 )
 
-# ─── 1. Stack recomendado actual ──────────────────────────────────────────────
 
-st.subheader("Stack recomendado actual")
+def filter_stack(df: pl.DataFrame) -> pl.DataFrame:
+    """Apply sidebar filters to stack_summary."""
+    return (
+        df
+        .filter(pl.col("topic").is_in(topic_sel))
+        .filter(pl.col("verdict").is_in(verdict_sel))
+        .filter(pl.col("trend").is_in(trend_sel))
+    )
+
+
+# ─── 1. Stack actual — recomienda vs desaconseja ──────────────────────────────
+
+st.subheader("Stack actual")
 st.caption(
-    "Top términos por score ponderado. Por defecto filtrado a **activos** "
-    "(mencionados en los últimos 2 años). Cambia la tendencia en el sidebar."
+    "Izquierda: lo que **recomienda**. Derecha: lo que **desaconseja** explícitamente. "
+    "Ordenado por score ponderado por recencia. Por defecto filtrado a `activo`."
 )
 
 if stack_summary is not None:
-    ss = (
-        stack_summary
-        .filter(pl.col("topic").is_in(topic_sel))
-        .filter(pl.col("trend").is_in(trend_sel))
-        .sort("weighted_score", descending=True)
-        .head(20)
-        .to_pandas()
-    )
-    if len(ss) > 0:
-        fig_bar = px.bar(
-            ss,
-            x="weighted_score",
-            y="term",
-            color="topic",
-            orientation="h",
-            hover_data=["total_mentions", "recent_mentions", "last_year", "trend"],
-            labels={"weighted_score": "Score ponderado", "term": "", "topic": "Área"},
+    filtered = filter_stack(stack_summary)
+    col_rec, col_des = st.columns(2)
+
+    with col_rec:
+        st.markdown("#### ✅ Recomienda")
+        rec = (
+            filtered
+            .filter(pl.col("verdict") == "recomienda")
+            .sort("weighted_score", descending=True)
+            .head(20)
+            .to_pandas()
         )
-        fig_bar.update_layout(
-            yaxis=dict(autorange="reversed"),
-            margin=dict(t=10, b=10),
-            height=max(300, len(ss) * 30),
+        if len(rec) > 0:
+            rec["topic_label"] = rec["topic"].map(TOPIC_LABELS)
+            fig_rec = px.bar(
+                rec,
+                x="weighted_score",
+                y="term",
+                color="topic_label",
+                orientation="h",
+                hover_data=["total_mentions", "recent_mentions", "last_year",
+                            "positive_excerpts", "negative_excerpts"],
+                labels={"weighted_score": "Score", "term": "", "topic_label": "Área"},
+            )
+            fig_rec.update_layout(
+                yaxis=dict(autorange="reversed"),
+                margin=dict(t=10, b=10),
+                height=max(280, len(rec) * 28),
+                showlegend=True,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.3),
+            )
+            st.plotly_chart(fig_rec, use_container_width=True)
+        else:
+            st.info("Ningún término recomendado con los filtros actuales.")
+
+    with col_des:
+        st.markdown("#### ❌ Desaconseja")
+        des = (
+            filtered
+            .filter(pl.col("verdict") == "desaconseja")
+            .sort("weighted_score", descending=True)
+            .head(20)
+            .to_pandas()
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
-    else:
-        st.info("Sin términos con los filtros actuales.")
+        if len(des) > 0:
+            des["topic_label"] = des["topic"].map(TOPIC_LABELS)
+            fig_des = px.bar(
+                des,
+                x="weighted_score",
+                y="term",
+                color="topic_label",
+                orientation="h",
+                hover_data=["total_mentions", "recent_mentions", "last_year",
+                            "positive_excerpts", "negative_excerpts"],
+                labels={"weighted_score": "Score", "term": "", "topic_label": "Área"},
+            )
+            fig_des.update_layout(
+                yaxis=dict(autorange="reversed"),
+                margin=dict(t=10, b=10),
+                height=max(280, len(des) * 28),
+                showlegend=True,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.3),
+            )
+            st.plotly_chart(fig_des, use_container_width=True)
+        else:
+            st.info("Ningún término desaconsejado con los filtros actuales.")
 else:
     st.info("Sin datos — ejecuta `python isvidal/analyze_isvidal.py`.")
 
-# ─── 2. Tendencias (tabla) ────────────────────────────────────────────────────
+# ─── 2. Tabla completa ────────────────────────────────────────────────────────
 
-st.subheader("Clasificación por tendencia")
+st.subheader("Clasificación completa")
 st.caption(
-    "**Activo**: mencionado en los últimos 2 años · "
-    "**Declinante**: última mención hace 2–3 años · "
-    "**Abandonado**: última mención hace 4+ años."
+    "Todos los términos con verdict (recomienda/desaconseja/mixto/neutral) y "
+    "tendencia temporal (activo/declinante/abandonado). Los filtros del sidebar aplican."
 )
 
 if stack_summary is not None:
     table = (
         stack_summary
         .filter(pl.col("topic").is_in(topic_sel))
+        .filter(pl.col("verdict").is_in(verdict_sel))
+        .filter(pl.col("trend").is_in(trend_sel))
         .select([
-            "term", "topic", "trend",
-            "weighted_score", "total_mentions", "recent_mentions",
-            "first_year", "last_year", "years_since_last",
+            "term", "topic", "verdict", "trend",
+            "weighted_score", "stance_score",
+            "positive_excerpts", "negative_excerpts", "neutral_excerpts",
+            "total_mentions", "first_year", "last_year",
         ])
-        .sort(["trend", "weighted_score"], descending=[False, True])
+        .sort(["verdict", "weighted_score"], descending=[False, True])
         .to_pandas()
     )
-    # Pretty labels
-    table["topic"] = table["topic"].map(TOPIC_LABELS)
-    table["trend"] = table["trend"].map(TREND_LABELS)
-    table["weighted_score"] = table["weighted_score"].round(2)
-    table = table.rename(columns={
-        "term": "Término",
-        "topic": "Área",
-        "trend": "Tendencia",
-        "weighted_score": "Score",
-        "total_mentions": "Total",
-        "recent_mentions": "Recientes",
-        "first_year": "Desde",
-        "last_year": "Hasta",
-        "years_since_last": "Años sin mención",
-    })
-    st.dataframe(table, hide_index=True, use_container_width=True, height=420)
+    if len(table) > 0:
+        table["topic"] = table["topic"].map(TOPIC_LABELS)
+        table["verdict"] = table["verdict"].map(VERDICT_LABELS)
+        table["trend"] = table["trend"].map(TREND_LABELS)
+        table["weighted_score"] = table["weighted_score"].round(2)
+        table["stance_score"] = table["stance_score"].round(2)
+        table = table.rename(columns={
+            "term": "Término",
+            "topic": "Área",
+            "verdict": "Verdict",
+            "trend": "Tendencia",
+            "weighted_score": "Score",
+            "stance_score": "Stance±",
+            "positive_excerpts": "➕",
+            "negative_excerpts": "➖",
+            "neutral_excerpts": "◯",
+            "total_mentions": "Total",
+            "first_year": "Desde",
+            "last_year": "Hasta",
+        })
+        st.dataframe(table, hide_index=True, use_container_width=True, height=460)
+    else:
+        st.info("Sin términos con los filtros actuales.")
 else:
     st.info("Sin datos — ejecuta Fase 3.")
 
-# ─── 3. Últimas palabras — excerpt más reciente por término ──────────────────
+# ─── 3. Últimas palabras por término ──────────────────────────────────────────
 
 st.subheader("Últimas palabras por término")
 st.caption(
     "Qué dice AHORA, no un promedio histórico. "
-    "Selecciona un término para ver su mención más reciente y el histórico debajo."
+    "Cada excerpt está etiquetado con su stance (positivo/negativo/neutral)."
 )
 
 if opinion is not None and stack_summary is not None:
-    term_topic = stack_summary.select(["term", "topic", "trend"]).unique()
-    opinion_wt = opinion.join(term_topic, on="term", how="left")
+    term_meta = stack_summary.select(["term", "topic", "trend", "verdict"]).unique()
+    opinion_wt = opinion.join(term_meta, on="term", how="left")
     available_terms = (
         opinion_wt
         .filter(pl.col("topic").is_in(topic_sel))
+        .filter(pl.col("verdict").is_in(verdict_sel))
         .filter(pl.col("trend").is_in(trend_sel))
         .sort("term")["term"]
         .unique(maintain_order=True)
         .to_list()
     )
     if available_terms:
-        # Default to top-ranked term with excerpts
-        default_idx = 0
-        if stack_summary is not None:
-            ranked = (
-                stack_summary
-                .filter(pl.col("topic").is_in(topic_sel))
-                .filter(pl.col("trend").is_in(trend_sel))
-                .sort("weighted_score", descending=True)["term"]
-                .to_list()
-            )
-            for i, t in enumerate(available_terms):
-                if t == next((r for r in ranked if r in available_terms), None):
-                    default_idx = i
-                    break
+        ranked = (
+            stack_summary
+            .filter(pl.col("topic").is_in(topic_sel))
+            .filter(pl.col("verdict").is_in(verdict_sel))
+            .filter(pl.col("trend").is_in(trend_sel))
+            .sort("weighted_score", descending=True)["term"]
+            .to_list()
+        )
+        default_term = next((t for t in ranked if t in available_terms), available_terms[0])
+        default_idx = available_terms.index(default_term)
 
         selected_term = st.selectbox(
             "Término",
@@ -243,15 +328,17 @@ if opinion is not None and stack_summary is not None:
             opinion_wt
             .filter(pl.col("term") == selected_term)
             .sort("year", descending=True)
-            .select(["year", "post_num", "excerpt"])
+            .select(["year", "post_num", "excerpt", "stance"])
         )
         if len(excerpts) > 0:
             latest = excerpts.row(0, named=True)
+            border, bg = STANCE_STYLE.get(latest["stance"], STANCE_STYLE["neutral"])
             st.markdown("**Última mención**")
             st.markdown(
-                f"<div style='border-left: 4px solid #16a34a; padding: 8px 16px; "
-                f"background: #f0fdf4; border-radius: 4px;'>"
-                f"<strong>{latest['year']}</strong> · post #{latest['post_num']}<br>"
+                f"<div style='border-left: 4px solid {border}; padding: 10px 16px; "
+                f"background: {bg}; border-radius: 4px;'>"
+                f"<strong>{latest['year']}</strong> · post #{latest['post_num']} · "
+                f"<span style='color: {border}; font-weight: 600;'>{latest['stance']}</span><br>"
                 f"<em>{latest['excerpt']}</em>"
                 f"</div>",
                 unsafe_allow_html=True,
@@ -259,11 +346,15 @@ if opinion is not None and stack_summary is not None:
             if len(excerpts) > 1:
                 with st.expander(f"Histórico completo ({len(excerpts)} menciones)"):
                     for row in excerpts.iter_rows(named=True):
+                        border2, bg2 = STANCE_STYLE.get(row["stance"], STANCE_STYLE["neutral"])
                         st.markdown(
-                            f"**{row['year']}** · post #{row['post_num']}\n\n"
-                            f"> {row['excerpt']}"
+                            f"<div style='border-left: 3px solid {border2}; padding: 6px 12px; "
+                            f"background: {bg2}; margin-bottom: 8px; border-radius: 3px;'>"
+                            f"<strong>{row['year']}</strong> · post #{row['post_num']} · "
+                            f"<span style='color: {border2};'>{row['stance']}</span><br>"
+                            f"{row['excerpt']}</div>",
+                            unsafe_allow_html=True,
                         )
-                        st.divider()
     else:
         st.info("Sin términos para los filtros seleccionados.")
 else:
@@ -272,15 +363,11 @@ else:
 # ─── 4. Evolución histórica (heatmap) ─────────────────────────────────────────
 
 st.subheader("Evolución histórica de menciones")
-st.caption("Qué se menciona cuándo. Útil para ver cuándo entró/salió cada término.")
+st.caption("Qué término se menciona cuándo. Intensidad = score ponderado.")
 
 if term_matrix is not None and stack_summary is not None:
-    # Only show terms matching trend filter
     keep_terms = (
-        stack_summary
-        .filter(pl.col("trend").is_in(trend_sel))
-        .filter(pl.col("topic").is_in(topic_sel))["term"]
-        .to_list()
+        filter_stack(stack_summary)["term"].to_list()
     )
     tm = (
         term_matrix
@@ -312,7 +399,7 @@ if term_matrix is not None and stack_summary is not None:
             xaxis_title="Año",
             yaxis_title="",
             margin=dict(t=10, b=10),
-            height=max(300, len(y_labels) * 22),
+            height=max(300, len(y_labels) * 20),
         )
         st.plotly_chart(fig_heat, use_container_width=True)
     else:
@@ -320,56 +407,18 @@ if term_matrix is not None and stack_summary is not None:
 else:
     st.info("Sin datos — ejecuta Fase 3.")
 
-# ─── 5. Evolución del código ──────────────────────────────────────────────────
+# ─── 5. Posts técnicos densos ─────────────────────────────────────────────────
 
-st.subheader("Evolución del código escrito")
-st.caption("% de bloques de código con cada feature, por año.")
+st.subheader("Posts técnicos densos")
+st.caption(
+    "Posts del último 30% del timeline con ≥2 términos técnicos o código. "
+    "Ordenados por densidad técnica. Clic para expandir el post completo."
+)
 
-if code_features is not None and not code_features.is_empty():
-    cf = (
-        code_features
-        .group_by("year")
-        .agg([
-            pl.len().alias("total_blocks"),
-            pl.col("has_hooks").sum().alias("has_hooks"),
-            pl.col("has_generics").sum().alias("has_generics"),
-            pl.col("has_async").sum().alias("has_async"),
-            pl.col("has_jsx").sum().alias("has_jsx"),
-        ])
-        .sort("year")
-        .with_columns([
-            (pl.col("has_hooks") / pl.col("total_blocks") * 100).alias("% hooks"),
-            (pl.col("has_generics") / pl.col("total_blocks") * 100).alias("% generics"),
-            (pl.col("has_async") / pl.col("total_blocks") * 100).alias("% async"),
-            (pl.col("has_jsx") / pl.col("total_blocks") * 100).alias("% jsx"),
-        ])
-        .to_pandas()
-    )
-    cf["year"] = cf["year"].astype(str)
-
-    fig_code = px.line(
-        cf,
-        x="year",
-        y=["% hooks", "% generics", "% async", "% jsx"],
-        markers=True,
-        labels={"year": "Año", "value": "%", "variable": "Feature"},
-    )
-    fig_code.update_layout(margin=dict(t=10, b=10))
-    st.plotly_chart(fig_code, use_container_width=True)
-    st.caption(f"{len(code_features)} bloques de código detectados a lo largo del histórico.")
-else:
-    st.info("Sin bloques de código detectados.")
-
-# ─── 6. Posts técnicos densos ─────────────────────────────────────────────────
-
-st.subheader("Posts técnicos densos (último 30% del timeline)")
-st.caption("Posts con más palabras o código, para leer en detalle sus argumentos.")
-
-if top_posts is not None:
+if top_posts is not None and not top_posts.is_empty():
     df_top = (
         top_posts
         .select(["post_num", "year", "pagina", "word_count", "has_code", "texto", "code_blocks"])
-        .sort("word_count", descending=True)
     )
     for row in df_top.iter_rows(named=True):
         label = (
