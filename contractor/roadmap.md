@@ -58,6 +58,7 @@ Los posts `#2659`, `#2662`, `#2671` de `isvidal` en MediaVida establecen:
 | Fase 6 — W5 Optimización y alternativas | `optimizacion.md` | ✅ 2026-04-09 |
 | Fase 7 — W6 Riesgos y pipeline | `riesgos.md` | ✅ 2026-04-09 |
 | Fase 8 — Consolidación y README | `README.md` | ✅ 2026-04-09 |
+| Ejecución — Plan de acción real | `ejecucion.md` | ✅ 2026-04-09 |
 
 ---
 
