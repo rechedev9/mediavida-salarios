@@ -25,7 +25,8 @@ The deliverable is a **Streamlit dashboard** (`app.py`) backed by structured dat
 - `isvidal/roadmap.md` — this file
 - **Phase 1 — ✅ DONE (2026-04-09).** `scrape_isvidal.py` + `posts_all.json` (1196 posts, 199 isvidal, 119 authors, 2020-07-23 — 2026-04-07).
 - **Phase 2 — ✅ DONE (2026-04-09).** `filter_isvidal.py` → `isvidal_posts.parquet` (199 rows), `isvidal_context.parquet` (149 rows), `isvidal_stats.txt`. 3-post round-trip verified.
-- **Phase 3, 4 — not started.**
+- **Phase 3 — ✅ DONE (2026-04-09).** `analyze_isvidal.py` → 5 parquets + `analysis_report.md`. 28 terms hit, 127 total mentions, 11 code blocks from 5 posts. Top terms: Redux (39.4), useEffect (21.1), SWR (20.9), Zustand (20.5).
+- **Phase 4 — not started.**
 
 Parent repo context:
 - `../scrape_mediavida.py` — working scraper skeleton to fork (fetch/cache/parse ~60 lines)
