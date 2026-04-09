@@ -201,17 +201,17 @@ with c_yes:
 
         | Capa | Elección |
         |---|---|
-        | **Framework** | React |
-        | **Build / dev server** | Vite |
-        | **Lenguaje** | TypeScript (`strict: true`) |
-        | **Routing** | TanStack Router |
-        | **Data fetching** | React Query + `fetch` nativo |
-        | **Styling** | Tailwind + shadcn |
-        | **Validación + tipos** | Zod (source of truth) |
-        | **Formularios** | React Hook Form + Zod |
-        | **Tablas** | TanStack Table |
-        | **API types** | Generados de OpenAPI (`npm run api:types`) |
-        | **Estado local** | URL → Nuqs → Context → Zustand (edge case) |
+        | **Framework** | [React](https://react.dev) |
+        | **Build / dev server** | [Vite](https://vite.dev) |
+        | **Lenguaje** | [TypeScript](https://www.typescriptlang.org/docs/) (`strict: true`) |
+        | **Routing** | [TanStack Router](https://tanstack.com/router/latest) |
+        | **Data fetching** | [React Query](https://tanstack.com/query/latest) + `fetch` nativo |
+        | **Styling** | [Tailwind CSS](https://tailwindcss.com/docs) + [shadcn/ui](https://ui.shadcn.com) |
+        | **Validación + tipos** | [Zod](https://zod.dev) (source of truth) |
+        | **Formularios** | [React Hook Form](https://react-hook-form.com) + Zod |
+        | **Tablas** | [TanStack Table](https://tanstack.com/table/latest) |
+        | **API types** | Generados de [OpenAPI](https://openapi-ts.dev) (`npm run api:types`) |
+        | **Estado local** | URL → [Nuqs](https://nuqs.47ng.com) → Context → [Zustand](https://zustand.docs.pmnd.rs) (edge case) |
         """
     )
 
