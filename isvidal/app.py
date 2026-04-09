@@ -177,6 +177,77 @@ def filter_stack(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+# ─── 0. Stack e2e recomendado — conclusión (executive summary) ────────────────
+
+st.subheader("🎯 Stack e2e recomendado para 2026")
+st.caption(
+    "Síntesis de sus recomendaciones explícitas más recientes (posts #1194, #1196, #1198 — 2026). "
+    "Son sus palabras literales, no inferencia del pipeline."
+)
+
+st.markdown(
+    "> **El stack que yo recomiendo: React + Vite + TypeScript + TailwindCSS (+shadcn) + "
+    "TanStack Router + React Query. 99.9% es sobre ingeniería, con React Query deberías tener "
+    "todo cubierto.**  \n"
+    "> — *post #1194, 2026*"
+)
+
+c_yes, c_no = st.columns(2)
+
+with c_yes:
+    st.markdown(
+        """
+        #### ✅ El stack
+
+        | Capa | Elección |
+        |---|---|
+        | **Framework** | React |
+        | **Build / dev server** | Vite |
+        | **Lenguaje** | TypeScript (`strict: true`) |
+        | **Routing** | TanStack Router |
+        | **Data fetching** | React Query + `fetch` nativo |
+        | **Styling** | Tailwind + shadcn |
+        | **Validación + tipos** | Zod (source of truth) |
+        | **Formularios** | React Hook Form + Zod |
+        | **Tablas** | TanStack Table |
+        | **API types** | Generados de OpenAPI (`npm run api:types`) |
+        | **Estado local** | URL → Nuqs → Context → Zustand (edge case) |
+        """
+    )
+
+with c_no:
+    st.markdown(
+        """
+        #### ❌ El anti-stack
+
+        | Categoría | Rechazo |
+        |---|---|
+        | **Meta-framework** | ~~Next.js~~ — *"No uses Next.js"* |
+        | **State library default** | ~~Redux~~ — *"mala practica"* |
+        | **HTTP client** | ~~axios~~ — *"no cometas el error"* |
+        | **CSS** | ~~CSS Modules~~ / ~~CSS-in-JS~~ / ~~Chakra~~ |
+        | **Hooks sobreusados** | `useEffect` — *"code smell"* |
+        | **Memoización prematura** | `useCallback`, `useMemo`, `memo()` |
+        | **TypeScript** | `any` — *"Nunca any"* |
+        """
+    )
+
+st.info(
+    "**Filosofía detectada en los datos (2025-2026):**  \n\n"
+    "1. **Minimizar ingeniería innecesaria.** El 99% del código no necesita state management, "
+    "memoización, ni microfrontends.  \n"
+    "2. **URL como source of truth de estado.** Primero URL, después Nuqs, después Context, "
+    "después Zustand. Casi nunca llegas a Zustand.  \n"
+    "3. **Zod como columna vertebral del tipado.** No solo validación — los tipos TS se "
+    "generan *desde* schemas Zod, y esos schemas se generan desde la API (OpenAPI).  \n"
+    "4. **Tooling maduro + buena DX.** React/Vite/TS/Tailwind se eligen por DX y porque "
+    "*\"las LLMs producen mejor código con herramientas maduras con millones de líneas públicas\"*.  \n"
+    "5. **Stack coherente > best-of-breed por capas.** No mezclar SSR+CSR+SPA+microfrontends por moda."
+)
+
+st.divider()
+
+
 # ─── 1. Stack actual — recomienda vs desaconseja ──────────────────────────────
 
 st.subheader("Stack actual")
