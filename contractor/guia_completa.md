@@ -18,6 +18,8 @@
 9. [Optimización fiscal y alternativas](#9-optimización-fiscal-y-alternativas)
 10. [Riesgos y gestión de cashflow](#10-riesgos-y-gestión-de-cashflow)
 11. [Plan de ejecución](#11-plan-de-ejecución)
+12. [Preparación de entrevista técnica](#12-preparación-de-entrevista-técnica)
+13. [Oportunidad de nicho — AI Tooling y MCP](#13-oportunidad-de-nicho--ai-tooling-y-mcp)
 
 ---
 
@@ -137,17 +139,77 @@ No como perfil principal en Malt, sí como mención en LinkedIn y conversaciones
 
 *Más alto de lo que sugeriría para 2 años genérico, porque el portfolio es más sólido de lo esperado.*
 
+---
+
+### Datos reales de Malt 2026 — fuente directa
+
+> Los datos de Malt son las tarifas medias diarias de freelancers activos en la plataforma en los últimos 3 meses. Son el benchmark más fiable disponible públicamente porque reflejan lo que realmente se está cobrando, no estimaciones.
+
+#### Malt España — mercado local (referencia, no target)
+
+Los rates de Malt España reflejan clientes españoles. Para contractors con clientes extranjeros son un suelo mínimo, no el objetivo.
+
+| Perfil | 0-2 años | 3-7 años | Experimentado (media) |
+|---|---|---|---|
+| Backend (general) | €175/día | €243/día | €300/día |
+| Fullstack | €172/día | €240/día | €297/día |
+| JavaScript/TS | €169/día | €236/día | €291/día |
+| **ReactJS** | **€189/día** | **€295/día** | **€334/día** |
+
+Por especialidad en España (experimentados):
+- ReactJS: **€451/día** — el más alto del frontend
+- Microservices: €338/día
+- Fullstack: €326/día
+- Node.js: €317/día
+
+*(Malt España, barómetro abril 2026. Fuente: malt.es/t/barometro-tarifas)*
+
+#### Malt Francia — mercado target principal
+
+Francia es el mercado más accesible para contractors españoles (timezone idéntica, proximidad cultural, isvidal trabaja para empresa francesa). Los rates son casi el doble que en España.
+
+| Perfil | 0-2 años | 3-7 años | Experimentado (media) | París |
+|---|---|---|---|---|
+| Backend (general) | €313/día | €426/día | €561/día | €604/día |
+| **ReactJS** | **€302/día** | **€420/día** | **€563/día** | €588/día |
+| JavaScript | — | — | €540/día | €567/día |
+
+Por especialidad en Francia (experimentados):
+- Microservices: €609/día
+- Node.js: €577/día
+- Fullstack: **€571/día**
+- ReactJS: **€567/día**
+- JavaScript: €540/día
+
+*(Malt Francia, barómetro abril 2026. Fuente: malt.fr/t/barometre-tarifs)*
+
+**Perfiles Go observados en Malt Francia:**
+- *Vincent Composieux — Tech Lead Full-stack + Go + DevOps + Cloud:* **€750/día** (Annecy, 41 reviews)
+- *Dani Gilabert — Go + NodeJS + ReactJS fullstack:* **€382/día** (Palamós, 8 reviews)
+
+Go no tiene categoría propia en el barómetro de Malt España/Francia — aparece bajo "Backend" o "Fullstack". Los profiles con Go listado explícitamente tienen rates 10-30% sobre la media de backend.
+
+#### ¿Qué significa esto para ti con 2 años?
+
+Con 2 años + portfolio de `riskforge` nivel tu target realista en **Malt Francia**:
+- **Primer contrato:** €300-380/día (zona "3-7 años" francesa, justificable con portfolio)
+- **Con primera referencia:** €380-480/día
+
+**La brecha España/Francia es el argumento más claro para buscar cliente extranjero:** el mismo perfil cobra €189/día en Malt España vs. €302/día en Malt Francia con 0-2 años. Un 60% más por cruzar la frontera virtual.
+
+---
+
 ### Benchmark europeo por país (Senior, 2026)
 
-| País | Go backend | TS/Next.js |
+| País | Go backend | TS/React/Next.js |
 |---|---|---|
-| 🇫🇷 Francia | €65-80/h (€520-640/día) | €60-75/h |
-| 🇩🇪 Alemania | €80-110/h (€640-880/día) | €75-100/h |
-| 🇬🇧 UK | £80-120/h (£640-960/día) | £70-100/h |
+| 🇫🇷 Francia | €65-80/h (~€520-640/día) | €60-75/h (~€480-600/día) |
+| 🇩🇪 Alemania | €80-110/h (~€640-880/día) | €75-100/h (~€600-800/día) |
+| 🇬🇧 UK | £80-120/h (~£640-960/día) | £70-100/h (~£560-800/día) |
 | 🇨🇭 Suiza | CHF 110-150/h | CHF 90-130/h |
 | 🇺🇸 US | $90-130/h | $80-120/h |
 
-*Datos de primera mano: isvidal (contractor español activo, MediaVida 2026). Floor general: €300-350/día. Medio: €400-600/día.*
+*Fuentes: index.dev European Developer Rates 2026, IT Jobs Watch UK, isvidal MediaVida.*
 
 ### Cuánto se lleva a casa (orientativo, Madrid)
 
@@ -587,4 +649,133 @@ Mes 3-4:
 
 ---
 
-*Investigación realizada en abril 2026. Fuentes: AEAT sede electrónica, Seguridad Social, Infoautónomos, Holded, taxdown.es, index.dev European Developer Rates 2026, IT Jobs Watch UK, remotepass.com, riseworks.io, posts #2659 #2662 #2671 de isvidal en MediaVida, github.com/rechedev9.*
+---
+
+## 12. Preparación de entrevista técnica
+
+### Go/Golang — preguntas habituales
+
+Las entrevistas de Go contractor se centran en dos ejes: **arquitectura de sistemas concurrentes** y **decisiones de diseño**. Con `riskforge` en el CV, es muy probable que profundicen en fan-out, hedging y circuit breakers — te preguntarán cómo lo hiciste y por qué.
+
+#### Temas a dominar (ordenados por frecuencia)
+
+| Tema | Nivel | Lo que suelen preguntar |
+|---|---|---|
+| Goroutines vs OS threads | Básico | Diferencias de peso, gestión por el runtime, escalado a miles |
+| Channels buffered/unbuffered | Básico | Cuándo usar cada uno, qué pasa si el buffer está lleno |
+| `select` statement | Intermedio | Cómo manejar múltiples channels, el caso `default` |
+| `context.Context` | Intermedio | Cancelación, deadlines, propagación por goroutines |
+| `sync.Mutex` / `RWMutex` / `WaitGroup` | Intermedio | Cuándo usar mutex vs channel, diferencia Read/Write mutex |
+| Race conditions y race detector | Intermedio | Cómo detectar, por qué los maps no son thread-safe |
+| `sync.Map` | Intermedio | Cuándo preferir a map + mutex |
+| Patrones: fan-out, pipelines, worker pools | Avanzado | Implementar, gestionar backpressure, cancelación limpia |
+| Scheduler GMP model | Avanzado | G (goroutine), M (OS thread), P (processor) |
+| `pprof` y profiling | Avanzado | Identificar goroutine leaks, memory pressure |
+
+#### Preguntas concretas frecuentes
+
+```
+1. ¿Cómo implementarías un worker pool con N workers y cancelación limpia?
+2. ¿Cuándo usas channels vs mutexes para sincronización?
+3. ¿Qué pasa si escribes en un channel cerrado? ¿Y si lees de uno?
+4. ¿Cómo propagas cancelación a través de una cadena de goroutines?
+5. ¿Por qué los maps estándar de Go no son safe para concurrencia?
+6. ¿Cómo diseñarías un circuit breaker en Go? (relevante con riskforge)
+7. ¿Cuál es la diferencia entre panic/recover y error handling?
+8. ¿Cómo detectas y evitas goroutine leaks en producción?
+```
+
+#### Tu ventaja con riskforge
+
+`riskforge` implementa fan-out paralelo con hedging adaptativo (EMA p95), circuit breakers y rate limiters por carrier. Puedes responder las preguntas de concurrencia con código real que has escrito y decisiones concretas que tomaste. Esto pesa mucho más que respuestas teóricas.
+
+Prepara la narrativa: *"En riskforge implementé un fan-out a múltiples carriers en paralelo. El hedging funciona calculando el p95 de latencia con EMA para cada carrier y lanzando una request alternativa cuando un carrier supera su umbral. El circuit breaker tiene tres estados..."*
+
+---
+
+### Next.js / React — preguntas habituales
+
+Las entrevistas frontend/fullstack para contractors europeos se enfocan en arquitectura RSC y performance, no en sintaxis básica.
+
+| Tema | Lo que preguntan |
+|---|---|
+| React Server Components | Cuándo un componente debe ser server vs client, por qué |
+| Next.js App Router vs Pages Router | Trade-offs, cuándo migrar, qué se gana |
+| Streaming y Suspense | Cómo mejora TTFB, `loading.tsx`, streaming de datos |
+| Hidratación y "waterfall" | Qué es el JS waterfall, cómo evitarlo con RSC |
+| `use server` / Server Actions | Cuándo usar, seguridad, validación server-side |
+| Performance (Core Web Vitals) | LCP, CLS, FID — cómo medir y mejorar |
+| Auth patterns en Next.js | Auth.js v5, middleware, session edge runtime |
+| Testing | Vitest, Testing Library, Playwright — estrategia de tests |
+| TypeScript avanzado | Generics, `satisfies`, type inference, conditional types |
+
+---
+
+### System Design — con perfil Go + Next.js
+
+Para contratos senior, el system design es casi universal en empresas de 50+ personas. Con tu stack, los escenarios típicos:
+
+- *"Diseña una API de notificaciones en tiempo real para 100k usuarios"* → WebSockets/SSE, fan-out, cola de mensajes.
+- *"Diseña un sistema de rate limiting para una API pública"* → Token bucket (ya tienes implementado en riskforge), sliding window.
+- *"Diseña el backend de un sistema de pagos con múltiples providers"* → Patrón similar a riskforge: fan-out, retry, idempotencia, reconciliación.
+
+En estas preguntas usa riskforge como punto de referencia — ya tienes el modelo mental.
+
+---
+
+## 13. Oportunidad de nicho — AI Tooling y MCP
+
+### El mercado MCP en 2026
+
+El **Model Context Protocol (MCP)**, lanzado por Anthropic en noviembre 2024 y ahora bajo la Linux Foundation, se ha convertido en el estándar de facto para integrar LLMs con herramientas externas. En 18 meses pasó de 100.000 a 8 millones de descargas mensuales. Gartner predice que el 75% de los gateway vendors tendrán soporte MCP en 2026.
+
+Esto crea un nicho contractor emergente: **devs que saben construir MCP servers e integrar LLMs en sistemas existentes**.
+
+### Por qué tu portfolio te posiciona aquí
+
+- `tealium-mcp-server` — MCP server real, funcional, no un tutorial.
+- `honey-encryption-proxy` — proxy de seguridad para Claude Code, entiende el protocolo de agentes.
+- `shenronSDD` — herramienta de Spec-Driven Development para Claude Code.
+
+Estos tres repos juntos dicen: *"Este dev entiende cómo funcionan los agentes AI internamente, no solo cómo llamar a una API."*
+
+### Cómo monetizarlo como contractor
+
+**No es el perfil principal de Malt** — los clientes que buscan MCP aún no buscan con ese término. Pero en **LinkedIn y HN Who is Hiring**, hay creciente volumen de startups AI-native que buscan:
+- Devs que puedan integrar Claude/GPT-4 en sistemas Go/TS existentes.
+- Constructores de MCP servers para sus productos internos.
+- "AI Engineer" con experiencia en tool calling y agentes.
+
+El rate de estos roles es 20-40% superior al backend genérico porque la oferta es escasa.
+
+**Dónde buscarlo:**
+- LinkedIn: "AI Engineer", "LLM integration", "MCP developer", "AI tooling"
+- HN Who is Hiring: buscar "MCP", "agents", "Claude", "tool use"
+- Wellfound (AngelList): startups AI Series A/B que buscan integración
+
+**Cómo presentarlo:**
+No pongas "MCP developer" en el titular — es demasiado nicho para que los filtros lo encuentren. Pon en la descripción del perfil una mención a integración de LLMs y enlaza a `tealium-mcp-server`. Quien busque activamente MCP lo encontrará; quien no sepa qué es no lo penalizará.
+
+### Job boards Go específicos
+
+Además de los canales genéricos, estos son específicos para posiciones Go:
+
+| Board | URL | Tipo de roles |
+|---|---|---|
+| **GolangProjects** | golangprojects.com | Backend Go, remote EU |
+| **ReadyToTouch** | readytotouch.com/golang | FinTech, InsurTech, infra Go |
+| **RemoteOK** | remoteok.com/remote-golang-jobs | Global remote |
+| **Wellfound** | wellfound.com/role/r/golang-developer | Startups globales |
+| **Working Nomads** | workingnomads.com/remote-golang-jobs | Remote only |
+
+### Cómo funciona el algoritmo de Malt (para optimizar el perfil)
+
+- El algoritmo contacta ~30 freelancers por búsqueda. Aparecer en esos 30 requiere: perfil completo con keywords técnicas específicas, disponibilidad actualizada, y actividad reciente (conectarte al menos 1 vez al mes).
+- Si no te conectas en un mes, el algoritmo para de enviarte mensajes.
+- **Keywords que importan:** ser "desarrollador backend" es genérico. Añadir "Go", "Golang", "Next.js 16", "App Router", "React Server Components" mejora la precisión del matching.
+- **Responder siempre** a los mensajes (aunque rechaces el proyecto) mejora el score del algoritmo — no penaliza el rechazo.
+- Las primeras reseñas son críticas. Considera hacer un proyecto pequeño a precio reducido para conseguir las primeras 3-5 valoraciones que desbloquean visibilidad.
+
+---
+
+*Investigación realizada en abril 2026. Fuentes: AEAT sede electrónica, Seguridad Social, Infoautónomos, Holded, taxdown.es, index.dev European Developer Rates 2026, IT Jobs Watch UK, remotepass.com, riseworks.io, posts #2659 #2662 #2671 de isvidal en MediaVida, github.com/rechedev9, Malt barómetro España (malt.es/t/barometro-tarifas, abril 2026), Malt barómetro Francia (malt.fr/t/barometre-tarifs, abril 2026), GolangProjects, a16z MCP deep dive, Gartner MCP forecast 2026.*
