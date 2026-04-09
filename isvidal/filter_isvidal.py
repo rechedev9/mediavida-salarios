@@ -10,7 +10,7 @@ Outputs: isvidal/isvidal_posts.parquet
 import json
 import sys
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime
 from collections import Counter
 
 import polars as pl

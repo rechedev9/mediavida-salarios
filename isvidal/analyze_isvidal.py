@@ -194,9 +194,11 @@ def build_term_matrix(df: pl.DataFrame, weights: list[float]) -> pl.DataFrame:
 def build_opinion_excerpts(df: pl.DataFrame, weights: list[float]) -> pl.DataFrame:
     """
     Extract sentence-level excerpts mentioning each dictionary term.
-    Per (post, term), dedupe excerpts that share the same context window —
-    consecutive sentence matches would otherwise emit overlapping excerpts that
-    double-count the same opinion in stance aggregation.
+    Per (post, term), dedupe by the first 200 chars of the excerpt so that the
+    SAME ±1-sentence window is not emitted twice (which happens when a term
+    appears multiple times in one sentence). Near-duplicates from overlapping
+    windows at adjacent sentences can still slip through — those are rare
+    enough in practice that stance aggregation isn't materially affected.
     """
     rows = []
     for row_dict, w in zip(df.iter_rows(named=True), weights):
@@ -365,8 +367,16 @@ def apply_stance_cache(
     if not STANCE_CACHE.exists() or excerpts.is_empty():
         stance_vals = ["neutral"] * len(excerpts)
     else:
-        with open(STANCE_CACHE, encoding="utf-8") as f:
-            cache = json.load(f)
+        try:
+            with open(STANCE_CACHE, encoding="utf-8") as f:
+                cache = json.load(f)
+        except json.JSONDecodeError as e:
+            print(
+                f"  WARN: {STANCE_CACHE.name} is malformed ({e}); "
+                "skipping stance merge, all excerpts default to neutral",
+                file=sys.stderr,
+            )
+            cache = {}
 
         def lookup(row):
             full = _cache_key(row["term"], row["post_num"], row["excerpt"])

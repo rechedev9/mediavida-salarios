@@ -134,11 +134,14 @@ trend_sel_labels = st.sidebar.multiselect(
 label_to_trend = {v: k for k, v in TREND_LABELS.items()}
 trend_sel = [label_to_trend[lbl] for lbl in trend_sel_labels]
 
+# Slider needs min != max; expand the range by 1 year if the corpus is
+# single-year (can happen with tiny test fixtures).
+slider_min = earliest_year if earliest_year < latest_year else latest_year - 1
 year_range = st.sidebar.slider(
     "Años (heatmap histórico)",
-    earliest_year,
+    slider_min,
     latest_year,
-    (earliest_year, latest_year),
+    (slider_min, latest_year),
 )
 
 st.sidebar.markdown("---")
@@ -469,7 +472,10 @@ if top_posts is not None and not top_posts.is_empty():
             label += " 💻"
         with st.expander(label):
             st.write(row["texto"])
-            blocks = json.loads(row["code_blocks"]) if row["code_blocks"] else []
+            try:
+                blocks = json.loads(row["code_blocks"]) if row["code_blocks"] else []
+            except json.JSONDecodeError:
+                blocks = []
             for block in blocks:
                 st.code(block, language="tsx")
 else:

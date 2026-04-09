@@ -57,7 +57,7 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 | Next.js | 1.88 | activo | 2020–2026 |
 | React Router | 0.96 | declinante | 2020–2023 |
 | Gatsby | 0.88 | abandonado | 2020–2020 |
-| Remix | 0.71 | declinante | 2023–2023 |
+| Astro | 0.71 | declinante | 2023–2023 |
 
 ### Typescript
 
@@ -75,15 +75,15 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 |------|-------|-------|-------|
 | Vite | 3.19 | activo | 2021–2026 |
 | monorepo | 0.71 | activo | 2025–2025 |
-| Prettier | 0.12 | abandonado | 2020–2020 |
 | ESLint | 0.12 | abandonado | 2020–2020 |
+| Prettier | 0.12 | abandonado | 2020–2020 |
 
 ### Testing
 
 | Term | Score | Trend | Years |
 |------|-------|-------|-------|
-| Jest | 0.12 | abandonado | 2020–2020 |
 | Testing Library | 0.12 | abandonado | 2020–2020 |
+| Jest | 0.12 | abandonado | 2020–2020 |
 
 ### Styling
 
@@ -137,14 +137,14 @@ Analysis window: **2020–2026**. Recency weighting: exponential decay, half-lif
 | React Native | platforms | 2020 | 9 |
 | Gatsby | meta_frameworks | 2020 | 7 |
 | useReducer | hooks | 2020 | 4 |
-| Prettier | tooling | 2020 | 1 |
-| Django | backend | 2020 | 1 |
-| type | typescript | 2020 | 1 |
-| ESLint | tooling | 2020 | 1 |
-| Recoil | state_data | 2020 | 1 |
 | useContext | hooks | 2020 | 1 |
-| Jest | testing | 2020 | 1 |
+| type | typescript | 2020 | 1 |
 | Testing Library | testing | 2020 | 1 |
+| ESLint | tooling | 2020 | 1 |
+| Django | backend | 2020 | 1 |
+| Jest | testing | 2020 | 1 |
+| Recoil | state_data | 2020 | 1 |
+| Prettier | tooling | 2020 | 1 |
 
 ## Latest Opinion — Top 5 Active Terms
 
