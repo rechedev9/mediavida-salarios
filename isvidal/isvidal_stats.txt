@@ -1,0 +1,39 @@
+=== isvidal stats ===
+Total posts:        199
+Years active:       2020 – 2026
+
+Posts per year:
+  2020: 86
+  2021: 46
+  2022: 8
+  2023: 27
+  2024: 4
+  2025: 23
+  2026: 5
+
+Median word count:  17
+Posts with code:    2.5%
+
+Top 10 authors isvidal quoted:
+   13  MisKo
+   12  JohnVoiden
+   10  Zoko
+    9  Axtrix
+    8  JuAn4k4
+    7  QuitCat
+    7  [Borrado]
+    7  Wei-Yu
+    7  privet
+    5  Lord_Khronus
+
+Top 10 authors who quoted isvidal:
+   27  JohnVoiden
+   13  Axtrix
+    8  Zoko
+    8  JuAn4k4
+    8  VonRundstedt
+    8  LR
+    7  QuitCat
+    7  MisKo
+    6  MissFortune
+    5  Lord_Khronus

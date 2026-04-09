@@ -24,7 +24,8 @@ The deliverable is a **Streamlit dashboard** (`app.py`) backed by structured dat
 - `isvidal/log.md` — subproject context (confirmed HTML structure, design decisions)
 - `isvidal/roadmap.md` — this file
 - **Phase 1 — ✅ DONE (2026-04-09).** `scrape_isvidal.py` + `posts_all.json` (1196 posts, 199 isvidal, 119 authors, 2020-07-23 — 2026-04-07).
-- **Phase 2, 3, 4 — not started.**
+- **Phase 2 — ✅ DONE (2026-04-09).** `filter_isvidal.py` → `isvidal_posts.parquet` (199 rows), `isvidal_context.parquet` (149 rows), `isvidal_stats.txt`. 3-post round-trip verified.
+- **Phase 3, 4 — not started.**
 
 Parent repo context:
 - `../scrape_mediavida.py` — working scraper skeleton to fork (fetch/cache/parse ~60 lines)
