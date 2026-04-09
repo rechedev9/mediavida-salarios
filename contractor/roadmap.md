@@ -55,7 +55,8 @@ Los posts `#2659`, `#2662`, `#2671` de `isvidal` en MediaVida establecen:
 | Fase 3 — W2 Setup operacional | `setup.md` | ✅ 2026-04-09 |
 | Fase 4 — W3 Mercado y canales | `mercado.md` | ✅ 2026-04-09 |
 | Fase 5 — W4 Mecánica contractual | `contratos.md` | ✅ 2026-04-09 |
-| Fase 6 — W5 Optimización y alternativas | `optimizacion.md` | ⏳ pendiente |
+| Fase 6 — W5 Optimización y alternativas | `optimizacion.md` | ✅ 2026-04-09 |
+| Fase 7 — W6 Riesgos y pipeline | `riesgos.md` | ⏳ pendiente |
 
 ---
 
