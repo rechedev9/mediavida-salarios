@@ -1,10 +1,10 @@
 """
-isvidal idea evolution dashboard — Streamlit
+isvidal — conclusiones técnicas sobre su stack (Streamlit dashboard).
 
-Loads structured data produced by analyze_isvidal.py (Phase 3).
-Each section degrades gracefully with an info message if its data file is missing.
+Carga los parquets generados por analyze_isvidal.py (Fase 3).
+Cada sección degrada con un info si falta su fuente de datos.
 
-Source: mediavida.com/foro/dev/react-hilo-general-libreria-para-atraerlos-atarlos-todos-657749
+Fuente: mediavida.com/foro/dev/react-hilo-general-libreria-para-atraerlos-atarlos-todos-657749
 """
 
 import json
@@ -23,7 +23,6 @@ CODE_FEATURES_PATH = BASE / "isvidal_code_features.parquet"
 TOP_POSTS_PATH = BASE / "isvidal_top_posts.parquet"
 STACK_SUMMARY_PATH = BASE / "isvidal_stack_summary.parquet"
 
-# Topic keys match parquet values; labels shown in sidebar
 TOPIC_KEYS = ["hooks", "state_data", "meta_frameworks", "typescript", "tooling", "testing", "patterns"]
 TOPIC_LABELS = {
     "hooks": "Hooks",
@@ -34,9 +33,19 @@ TOPIC_LABELS = {
     "testing": "Testing",
     "patterns": "Patrones",
 }
+TREND_LABELS = {
+    "activo": "🟢 Activo",
+    "declinante": "🟡 Declinante",
+    "abandonado": "🔴 Abandonado",
+}
+TREND_COLORS = {
+    "activo": "#16a34a",
+    "declinante": "#ca8a04",
+    "abandonado": "#dc2626",
+}
 
 st.set_page_config(
-    page_title="isvidal — ideas & evolución técnica",
+    page_title="isvidal — conclusiones técnicas",
     page_icon="⚛️",
     layout="wide",
 )
@@ -56,6 +65,8 @@ code_features = load(CODE_FEATURES_PATH)
 top_posts = load(TOP_POSTS_PATH)
 stack_summary = load(STACK_SUMMARY_PATH)
 
+latest_year = int(posts["year"].max()) if posts is not None else 2026
+
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
 
 st.sidebar.header("Filtros")
@@ -66,105 +77,223 @@ topic_sel_labels = st.sidebar.multiselect(
     default=list(TOPIC_LABELS.values()),
     placeholder="Todas",
 )
-# Map selected labels back to parquet keys
 label_to_key = {v: k for k, v in TOPIC_LABELS.items()}
 topic_sel = [label_to_key[lbl] for lbl in topic_sel_labels]
 
-year_min = 2017
-year_max = 2026
-if posts is not None:
-    year_min = int(posts["year"].min())
-    year_max = int(posts["year"].max())
-year_range = st.sidebar.slider("Años", year_min, year_max, (year_min, year_max))
+trend_sel_labels = st.sidebar.multiselect(
+    "Tendencia",
+    options=list(TREND_LABELS.values()),
+    default=[TREND_LABELS["activo"]],  # default: only show what he still uses
+    placeholder="Todas",
+)
+label_to_trend = {v: k for k, v in TREND_LABELS.items()}
+trend_sel = [label_to_trend[lbl] for lbl in trend_sel_labels]
 
-use_recency = st.sidebar.toggle("Ponderación por recencia", value=True)
-score_col = "weighted_count" if use_recency else "raw_count"
+year_min_default = 2020
+year_max_default = latest_year
+if posts is not None:
+    year_min_default = int(posts["year"].min())
+year_range = st.sidebar.slider(
+    "Años (heatmap histórico)",
+    year_min_default,
+    year_max_default,
+    (year_min_default, year_max_default),
+)
+
+st.sidebar.markdown("---")
+st.sidebar.caption(
+    f"**Ponderación por recencia:** decaimiento exponencial con half-life 2 años. "
+    f"Un post de {latest_year - 4} pesa 0.25× uno de {latest_year}."
+)
+st.sidebar.caption(
+    "**Limitación:** el conteo de menciones es neutral — una mención puede ser "
+    "recomendación o crítica. Usar 'Últimas palabras' para ver contexto."
+)
 
 # ─── Header ──────────────────────────────────────────────────────────────────
 
-st.title("isvidal — evolución de ideas en React / TypeScript")
+st.title("isvidal — conclusiones técnicas")
 st.caption(
-    "Fuente: [React hilo general — MediaVida](https://www.mediavida.com/foro/dev/"
+    "Evolución de su uso de tools, libs y frameworks. Los valores recientes pesan más "
+    f"por decaimiento exponencial (half-life 2 años). Ventana: **{year_min_default}–{latest_year}**. "
+    "Fuente: [React hilo general — MediaVida]"
+    "(https://www.mediavida.com/foro/dev/"
     "react-hilo-general-libreria-para-atraerlos-atarlos-todos-657749)"
 )
 
-if posts is not None:
-    total = len(posts)
-    first = posts["fecha_iso"].min()[:10]
-    last = posts["fecha_iso"].max()[:10]
-    med_words = int(posts["word_count"].median())
-    pct_code = 100 * posts["has_code"].sum() / total
+# ─── 1. Stack recomendado actual ──────────────────────────────────────────────
 
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Posts totales", total)
-    c2.metric("Primer post", first)
-    c3.metric("Último post", last)
-    c4.metric("Palabras (mediana)", med_words)
-    c5.metric("Posts con código", f"{pct_code:.0f}%")
-else:
-    st.info("Ejecuta la pipeline (Fases 1-3) para activar el dashboard.")
+st.subheader("Stack recomendado actual")
+st.caption(
+    "Top términos por score ponderado. Por defecto filtrado a **activos** "
+    "(mencionados en los últimos 2 años). Cambia la tendencia en el sidebar."
+)
 
-# ─── Activity timeline ────────────────────────────────────────────────────────
-
-st.subheader("Actividad por año")
-
-if posts is not None:
-    by_year = (
-        posts.filter(pl.col("year").is_between(year_range[0], year_range[1]))
-        .group_by("year")
-        .agg([
-            pl.len().alias("posts"),
-            pl.col("word_count").sum().alias("words"),
-        ])
-        .sort("year")
+if stack_summary is not None:
+    ss = (
+        stack_summary
+        .filter(pl.col("topic").is_in(topic_sel))
+        .filter(pl.col("trend").is_in(trend_sel))
+        .sort("weighted_score", descending=True)
+        .head(20)
         .to_pandas()
     )
-
-    fig = px.bar(
-        by_year,
-        x="year",
-        y="posts",
-        labels={"year": "Año", "posts": "Posts"},
-        color_discrete_sequence=["#636EFA"],
-    )
-    fig.add_scatter(
-        x=by_year["year"],
-        y=by_year["words"] / 100,
-        mode="lines+markers",
-        name="Palabras / 100",
-        yaxis="y2",
-        line=dict(color="#EF553B"),
-    )
-    fig.update_layout(
-        xaxis=dict(dtick=1),
-        yaxis2=dict(overlaying="y", side="right", showgrid=False, title="Palabras / 100"),
-        legend=dict(x=0.01, y=0.99),
-        margin=dict(t=10),
-        showlegend=True,
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    if len(ss) > 0:
+        fig_bar = px.bar(
+            ss,
+            x="weighted_score",
+            y="term",
+            color="topic",
+            orientation="h",
+            hover_data=["total_mentions", "recent_mentions", "last_year", "trend"],
+            labels={"weighted_score": "Score ponderado", "term": "", "topic": "Área"},
+        )
+        fig_bar.update_layout(
+            yaxis=dict(autorange="reversed"),
+            margin=dict(t=10, b=10),
+            height=max(300, len(ss) * 30),
+        )
+        st.plotly_chart(fig_bar, use_container_width=True)
+    else:
+        st.info("Sin términos con los filtros actuales.")
 else:
-    st.info("Sin datos — ejecuta Fase 2.")
+    st.info("Sin datos — ejecuta `python isvidal/analyze_isvidal.py`.")
 
-# ─── Tech mention heatmap ─────────────────────────────────────────────────────
+# ─── 2. Tendencias (tabla) ────────────────────────────────────────────────────
 
-st.subheader("Mapa de menciones técnicas")
+st.subheader("Clasificación por tendencia")
+st.caption(
+    "**Activo**: mencionado en los últimos 2 años · "
+    "**Declinante**: última mención hace 2–3 años · "
+    "**Abandonado**: última mención hace 4+ años."
+)
 
-if term_matrix is not None:
+if stack_summary is not None:
+    table = (
+        stack_summary
+        .filter(pl.col("topic").is_in(topic_sel))
+        .select([
+            "term", "topic", "trend",
+            "weighted_score", "total_mentions", "recent_mentions",
+            "first_year", "last_year", "years_since_last",
+        ])
+        .sort(["trend", "weighted_score"], descending=[False, True])
+        .to_pandas()
+    )
+    # Pretty labels
+    table["topic"] = table["topic"].map(TOPIC_LABELS)
+    table["trend"] = table["trend"].map(TREND_LABELS)
+    table["weighted_score"] = table["weighted_score"].round(2)
+    table = table.rename(columns={
+        "term": "Término",
+        "topic": "Área",
+        "trend": "Tendencia",
+        "weighted_score": "Score",
+        "total_mentions": "Total",
+        "recent_mentions": "Recientes",
+        "first_year": "Desde",
+        "last_year": "Hasta",
+        "years_since_last": "Años sin mención",
+    })
+    st.dataframe(table, hide_index=True, use_container_width=True, height=420)
+else:
+    st.info("Sin datos — ejecuta Fase 3.")
+
+# ─── 3. Últimas palabras — excerpt más reciente por término ──────────────────
+
+st.subheader("Últimas palabras por término")
+st.caption(
+    "Qué dice AHORA, no un promedio histórico. "
+    "Selecciona un término para ver su mención más reciente y el histórico debajo."
+)
+
+if opinion is not None and stack_summary is not None:
+    term_topic = stack_summary.select(["term", "topic", "trend"]).unique()
+    opinion_wt = opinion.join(term_topic, on="term", how="left")
+    available_terms = (
+        opinion_wt
+        .filter(pl.col("topic").is_in(topic_sel))
+        .filter(pl.col("trend").is_in(trend_sel))
+        .sort("term")["term"]
+        .unique(maintain_order=True)
+        .to_list()
+    )
+    if available_terms:
+        # Default to top-ranked term with excerpts
+        default_idx = 0
+        if stack_summary is not None:
+            ranked = (
+                stack_summary
+                .filter(pl.col("topic").is_in(topic_sel))
+                .filter(pl.col("trend").is_in(trend_sel))
+                .sort("weighted_score", descending=True)["term"]
+                .to_list()
+            )
+            for i, t in enumerate(available_terms):
+                if t == next((r for r in ranked if r in available_terms), None):
+                    default_idx = i
+                    break
+
+        selected_term = st.selectbox(
+            "Término",
+            options=available_terms,
+            index=default_idx,
+        )
+        excerpts = (
+            opinion_wt
+            .filter(pl.col("term") == selected_term)
+            .sort("year", descending=True)
+            .select(["year", "post_num", "excerpt"])
+        )
+        if len(excerpts) > 0:
+            latest = excerpts.row(0, named=True)
+            st.markdown("**Última mención**")
+            st.markdown(
+                f"<div style='border-left: 4px solid #16a34a; padding: 8px 16px; "
+                f"background: #f0fdf4; border-radius: 4px;'>"
+                f"<strong>{latest['year']}</strong> · post #{latest['post_num']}<br>"
+                f"<em>{latest['excerpt']}</em>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+            if len(excerpts) > 1:
+                with st.expander(f"Histórico completo ({len(excerpts)} menciones)"):
+                    for row in excerpts.iter_rows(named=True):
+                        st.markdown(
+                            f"**{row['year']}** · post #{row['post_num']}\n\n"
+                            f"> {row['excerpt']}"
+                        )
+                        st.divider()
+    else:
+        st.info("Sin términos para los filtros seleccionados.")
+else:
+    st.info("Sin datos — ejecuta Fase 3.")
+
+# ─── 4. Evolución histórica (heatmap) ─────────────────────────────────────────
+
+st.subheader("Evolución histórica de menciones")
+st.caption("Qué se menciona cuándo. Útil para ver cuándo entró/salió cada término.")
+
+if term_matrix is not None and stack_summary is not None:
+    # Only show terms matching trend filter
+    keep_terms = (
+        stack_summary
+        .filter(pl.col("trend").is_in(trend_sel))
+        .filter(pl.col("topic").is_in(topic_sel))["term"]
+        .to_list()
+    )
     tm = (
         term_matrix
-        .filter(
-            pl.col("topic").is_in(topic_sel)
-            & pl.col("year").is_between(year_range[0], year_range[1])
-        )
+        .filter(pl.col("term").is_in(keep_terms))
+        .filter(pl.col("year").is_between(year_range[0], year_range[1]))
         .group_by(["year", "term", "topic"])
-        .agg(pl.col(score_col).sum())
+        .agg(pl.col("weighted_count").sum())
         .sort(["topic", "term", "year"])
     )
 
     if len(tm) > 0:
         pivot = (
-            tm.pivot(on="year", index="term", values=score_col, aggregate_function="sum")
+            tm.pivot(on="year", index="term", values="weighted_count", aggregate_function="sum")
             .fill_null(0)
         )
         year_cols = sorted(c for c in pivot.columns if c != "term")
@@ -176,93 +305,29 @@ if term_matrix is not None:
             x=year_cols,
             y=y_labels,
             color_continuous_scale="Blues",
-            labels=dict(color="Score"),
+            labels=dict(color="Score ponderado"),
             aspect="auto",
         )
         fig_heat.update_layout(
             xaxis_title="Año",
             yaxis_title="",
-            margin=dict(t=10),
+            margin=dict(t=10, b=10),
             height=max(300, len(y_labels) * 22),
         )
         st.plotly_chart(fig_heat, use_container_width=True)
     else:
-        st.info("Sin menciones para los filtros seleccionados.")
+        st.info("Sin menciones para los filtros actuales.")
 else:
     st.info("Sin datos — ejecuta Fase 3.")
 
-# ─── Current stack (recency-weighted) ────────────────────────────────────────
+# ─── 5. Evolución del código ──────────────────────────────────────────────────
 
-st.subheader("Stack actual — top términos" + (" (ponderado)" if use_recency else " (raw)"))
+st.subheader("Evolución del código escrito")
+st.caption("% de bloques de código con cada feature, por año.")
 
-if stack_summary is not None:
-    ss = (
-        stack_summary
-        .filter(pl.col("topic").is_in(topic_sel))
-        .sort("weighted_score" if use_recency else "total_mentions", descending=True)
-        .head(20)
-        .to_pandas()
-    )
-    y_col = "weighted_score" if use_recency else "total_mentions"
-    fig_bar = px.bar(
-        ss,
-        x=y_col,
-        y="term",
-        color="topic",
-        orientation="h",
-        labels={y_col: "Score", "term": "", "topic": "Área"},
-    )
-    fig_bar.update_layout(
-        yaxis=dict(autorange="reversed"),
-        margin=dict(t=10),
-        height=max(300, len(ss) * 30),
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
-else:
-    st.info("Sin datos — ejecuta Fase 3.")
-
-# ─── Opinion deep-dive ────────────────────────────────────────────────────────
-
-st.subheader("Seguimiento de opiniones por término")
-
-if opinion is not None and stack_summary is not None:
-    # Join term→topic from stack_summary (opinion doesn't carry topic)
-    term_topic = stack_summary.select(["term", "topic"]).unique()
-    opinion_with_topic = opinion.join(term_topic, on="term", how="left")
-    available_terms = sorted(
-        opinion_with_topic
-        .filter(pl.col("topic").is_in(topic_sel))["term"]
-        .unique().to_list()
-    )
-    if available_terms:
-        selected_term = st.selectbox("Término", options=available_terms)
-        excerpts = (
-            opinion_with_topic
-            .filter(
-                (pl.col("term") == selected_term)
-                & pl.col("year").is_between(year_range[0], year_range[1])
-            )
-            .sort("year", descending=True)
-            .select(["year", "post_num", "excerpt"])
-        )
-        for row in excerpts.iter_rows(named=True):
-            st.markdown(
-                f"**{row['year']}** · post #{row['post_num']}\n\n> {row['excerpt']}"
-            )
-            st.divider()
-    else:
-        st.info("Sin términos para los filtros seleccionados.")
-else:
-    st.info("Sin datos — ejecuta Fase 3.")
-
-# ─── Code evolution ───────────────────────────────────────────────────────────
-
-st.subheader("Evolución del código")
-
-if code_features is not None:
+if code_features is not None and not code_features.is_empty():
     cf = (
         code_features
-        .filter(pl.col("year").is_between(year_range[0], year_range[1]))
         .group_by("year")
         .agg([
             pl.len().alias("total_blocks"),
@@ -280,6 +345,7 @@ if code_features is not None:
         ])
         .to_pandas()
     )
+    cf["year"] = cf["year"].astype(str)
 
     fig_code = px.line(
         cf,
@@ -288,25 +354,28 @@ if code_features is not None:
         markers=True,
         labels={"year": "Año", "value": "%", "variable": "Feature"},
     )
-    fig_code.update_layout(xaxis=dict(dtick=1), margin=dict(t=10))
+    fig_code.update_layout(margin=dict(t=10, b=10))
     st.plotly_chart(fig_code, use_container_width=True)
+    st.caption(f"{len(code_features)} bloques de código detectados a lo largo del histórico.")
 else:
-    st.info("Sin datos — ejecuta Fase 3.")
+    st.info("Sin bloques de código detectados.")
 
-# ─── Top posts ────────────────────────────────────────────────────────────────
+# ─── 6. Posts técnicos densos ─────────────────────────────────────────────────
 
-st.subheader("Posts más densos / con más código")
+st.subheader("Posts técnicos densos (último 30% del timeline)")
+st.caption("Posts con más palabras o código, para leer en detalle sus argumentos.")
 
 if top_posts is not None:
     df_top = (
         top_posts
-        .filter(pl.col("year").is_between(year_range[0], year_range[1]))
         .select(["post_num", "year", "pagina", "word_count", "has_code", "texto", "code_blocks"])
         .sort("word_count", descending=True)
     )
-
     for row in df_top.iter_rows(named=True):
-        label = f"**#{row['post_num']}** · {row['year']} · pág. {row['pagina']} · {row['word_count']} palabras"
+        label = (
+            f"**#{row['post_num']}** · {row['year']} · "
+            f"pág. {row['pagina']} · {row['word_count']} palabras"
+        )
         if row["has_code"]:
             label += " 💻"
         with st.expander(label):

@@ -77,11 +77,20 @@ def load_posts() -> pl.DataFrame:
     return pl.read_parquet(OUT / "isvidal_posts.parquet").sort("timestamp")
 
 
-def recency_weights(n: int) -> list[float]:
-    """Linear weights: 1.0 (oldest post) → 2.0 (newest post)."""
-    if n == 1:
-        return [2.0]
-    return [1.0 + i / (n - 1) for i in range(n)]
+# Exponential decay — half-life 2 years. A 2026 mention is worth 1.0,
+# a 2024 mention 0.5, a 2022 mention 0.25, a 2020 mention 0.125.
+# Aligned with frontend churn: old tooling is almost certainly outdated.
+HALF_LIFE_YEARS = 2.0
+RECENT_WINDOW_YEARS = 1  # "recent" = last 2 calendar years (LATEST-1 .. LATEST)
+
+
+def year_weight(year: int, latest_year: int) -> float:
+    return 0.5 ** ((latest_year - year) / HALF_LIFE_YEARS)
+
+
+def build_year_weights(df: pl.DataFrame) -> list[float]:
+    latest = int(df["year"].max())
+    return [year_weight(int(y), latest) for y in df["year"].to_list()]
 
 
 def post_searchable_text(row: dict) -> str:
@@ -242,13 +251,16 @@ def build_top_posts(df: pl.DataFrame) -> pl.DataFrame:
 
 # ── 3.5  Stack summary ────────────────────────────────────────────────────────
 
-def build_stack_summary(matrix: pl.DataFrame) -> pl.DataFrame:
+def build_stack_summary(matrix: pl.DataFrame, latest_year: int) -> pl.DataFrame:
     if matrix.is_empty():
         return pl.DataFrame(schema={
             "term": pl.String, "topic": pl.String, "weighted_score": pl.Float64,
             "first_year": pl.Int64, "last_year": pl.Int64, "total_mentions": pl.Int64,
+            "recent_mentions": pl.Int64, "recent_share": pl.Float64,
+            "years_since_last": pl.Int64, "trend": pl.String,
         })
-    return (
+    recent_cutoff = latest_year - RECENT_WINDOW_YEARS
+    base = (
         matrix
         .group_by(["term", "topic"])
         .agg([
@@ -257,6 +269,27 @@ def build_stack_summary(matrix: pl.DataFrame) -> pl.DataFrame:
             pl.max("year").alias("last_year"),
             pl.sum("raw_count").alias("total_mentions"),
         ])
+    )
+    recent = (
+        matrix
+        .filter(pl.col("year") >= recent_cutoff)
+        .group_by(["term", "topic"])
+        .agg(pl.sum("raw_count").alias("recent_mentions"))
+    )
+    return (
+        base
+        .join(recent, on=["term", "topic"], how="left")
+        .with_columns(pl.col("recent_mentions").fill_null(0))
+        .with_columns([
+            (pl.col("recent_mentions") / pl.col("total_mentions")).alias("recent_share"),
+            (latest_year - pl.col("last_year")).alias("years_since_last"),
+        ])
+        .with_columns(
+            pl.when(pl.col("years_since_last") <= 1).then(pl.lit("activo"))
+            .when(pl.col("years_since_last") <= 3).then(pl.lit("declinante"))
+            .otherwise(pl.lit("abandonado"))
+            .alias("trend")
+        )
         .sort("weighted_score", descending=True)
     )
 
@@ -269,68 +302,97 @@ def build_report(
     summary: pl.DataFrame,
     excerpts: pl.DataFrame,
     top_posts: pl.DataFrame,
+    latest_year: int,
 ) -> str:
     lines: list[str] = []
-    lines.append("# isvidal — Idea Evolution Analysis Report\n")
-
-    # Temporal summary
-    lines.append("## Temporal Summary\n")
-    by_year = (
-        df
-        .group_by("year")
-        .agg([
-            pl.len().alias("posts"),
-            pl.sum("word_count").alias("words"),
-            pl.mean("has_code").cast(pl.Float64).alias("code_ratio"),
-        ])
-        .sort("year")
+    lines.append("# isvidal — Technical Recommendations Report\n")
+    lines.append(
+        f"Analysis window: **{df['year'].min()}–{latest_year}**. "
+        f"Recency weighting: exponential decay, half-life **{HALF_LIFE_YEARS:.0f} years**. "
+        f"A mention from {latest_year - 4} is worth "
+        f"{year_weight(latest_year - 4, latest_year):.2f} of a {latest_year} mention.\n"
     )
-    lines.append("| Year | Posts | Words | Code% |")
-    lines.append("|------|-------|-------|-------|")
-    for row in by_year.iter_rows(named=True):
-        lines.append(
-            f"| {row['year']} | {row['posts']} | {row['words']} "
-            f"| {row['code_ratio'] * 100:.0f}% |"
+
+    # Current stack (trend = activo, sorted by weighted_score)
+    lines.append("## Current Stack (trend = activo)\n")
+    if not summary.is_empty():
+        active = (
+            summary
+            .filter(pl.col("trend") == "activo")
+            .sort("weighted_score", descending=True)
+            .head(20)
         )
-    lines.append("")
+        lines.append("| Term | Topic | Score | Total | Recent | Last |")
+        lines.append("|------|-------|-------|-------|--------|------|")
+        for row in active.iter_rows(named=True):
+            lines.append(
+                f"| {row['term']} | {row['topic']} "
+                f"| {row['weighted_score']:.2f} | {row['total_mentions']} "
+                f"| {row['recent_mentions']} | {row['last_year']} |"
+            )
+        lines.append("")
 
     # Top terms per topic
-    lines.append("## Top Terms per Topic (Recency-Weighted)\n")
+    lines.append("## Top Terms per Topic\n")
     if not summary.is_empty():
         for topic in TERMS:
             t = summary.filter(pl.col("topic") == topic).head(5)
             if t.is_empty():
                 continue
             lines.append(f"### {topic.replace('_', ' ').title()}\n")
-            lines.append("| Term | Weighted Score | Total Mentions | Years |")
-            lines.append("|------|----------------|----------------|-------|")
+            lines.append("| Term | Score | Trend | Years |")
+            lines.append("|------|-------|-------|-------|")
             for row in t.iter_rows(named=True):
                 lines.append(
-                    f"| {row['term']} | {row['weighted_score']:.1f} "
-                    f"| {row['total_mentions']} "
+                    f"| {row['term']} | {row['weighted_score']:.2f} "
+                    f"| {row['trend']} "
                     f"| {row['first_year']}–{row['last_year']} |"
                 )
             lines.append("")
 
-    # Opinion excerpts for top 5 terms
-    lines.append("## Opinion Evolution — Top 5 Terms\n")
+    # Abandoned terms
+    lines.append("## Abandoned Terms (no mention in last 4+ years)\n")
+    if not summary.is_empty():
+        abandoned = (
+            summary
+            .filter(pl.col("trend") == "abandonado")
+            .sort("last_year", descending=True)
+        )
+        if not abandoned.is_empty():
+            lines.append("| Term | Topic | Last Year | Total Mentions |")
+            lines.append("|------|-------|-----------|----------------|")
+            for row in abandoned.iter_rows(named=True):
+                lines.append(
+                    f"| {row['term']} | {row['topic']} "
+                    f"| {row['last_year']} | {row['total_mentions']} |"
+                )
+            lines.append("")
+
+    # Latest opinion per top-5 active term
+    lines.append("## Latest Opinion — Top 5 Active Terms\n")
     if not summary.is_empty() and not excerpts.is_empty():
-        top5 = summary.head(5)["term"].to_list()
+        top5 = (
+            summary
+            .filter(pl.col("trend") == "activo")
+            .head(5)["term"]
+            .to_list()
+        )
         for term in top5:
-            ex = (
+            latest = (
                 excerpts
                 .filter(pl.col("term") == term)
                 .sort("year", descending=True)
+                .head(1)
             )
-            if ex.is_empty():
+            if latest.is_empty():
                 continue
+            row = latest.row(0, named=True)
             lines.append(f"### `{term}`\n")
-            for row in ex.head(5).iter_rows(named=True):
-                lines.append(f"**{row['year']} · post #{row['post_num']}**")
-                lines.append(f"> {row['excerpt']}\n")
+            lines.append(f"**{row['year']} · post #{row['post_num']}**")
+            lines.append(f"> {row['excerpt']}\n")
 
-    # Top posts table
-    lines.append("## Top Posts (Last 30% of Timeline)\n")
+    # Top posts table (still useful — technical content density)
+    lines.append("## Dense Technical Posts (Last 30% of Timeline)\n")
     lines.append("| Year | Post # | Page | Words | Has Code | Preview |")
     lines.append("|------|--------|------|-------|----------|---------|")
     for row in top_posts.iter_rows(named=True):
@@ -356,10 +418,17 @@ def build_report(
 def main() -> None:
     print("Loading isvidal_posts.parquet …")
     df = load_posts()
-    print(f"  {len(df)} posts, years {df['year'].min()}–{df['year'].max()}")
+    latest_year = int(df["year"].max())
+    print(f"  {len(df)} posts, years {df['year'].min()}–{latest_year}")
 
-    weights = recency_weights(len(df))
-    print(f"  Recency weights: {weights[0]:.4f} (oldest) → {weights[-1]:.4f} (newest)")
+    weights = build_year_weights(df)
+    print(
+        f"  Year weights (half-life {HALF_LIFE_YEARS}y): "
+        f"{latest_year - 6}={year_weight(latest_year - 6, latest_year):.3f}  "
+        f"{latest_year - 4}={year_weight(latest_year - 4, latest_year):.3f}  "
+        f"{latest_year - 2}={year_weight(latest_year - 2, latest_year):.3f}  "
+        f"{latest_year}={year_weight(latest_year, latest_year):.3f}"
+    )
 
     print("\n3.1  Building term matrix …")
     matrix = build_term_matrix(df, weights)
@@ -382,12 +451,12 @@ def main() -> None:
     print(f"  {len(top_posts)} rows → isvidal_top_posts.parquet")
 
     print("\n3.5  Building stack summary …")
-    summary = build_stack_summary(matrix)
+    summary = build_stack_summary(matrix, latest_year)
     summary.write_parquet(OUT / "isvidal_stack_summary.parquet")
     print(f"  {len(summary)} rows → isvidal_stack_summary.parquet")
 
     print("\n3.6  Writing analysis_report.md …")
-    report = build_report(df, matrix, summary, excerpts, top_posts)
+    report = build_report(df, matrix, summary, excerpts, top_posts, latest_year)
     (OUT / "analysis_report.md").write_text(report, encoding="utf-8")
     print("  analysis_report.md written")
 
