@@ -56,7 +56,8 @@ Los posts `#2659`, `#2662`, `#2671` de `isvidal` en MediaVida establecen:
 | Fase 4 — W3 Mercado y canales | `mercado.md` | ✅ 2026-04-09 |
 | Fase 5 — W4 Mecánica contractual | `contratos.md` | ✅ 2026-04-09 |
 | Fase 6 — W5 Optimización y alternativas | `optimizacion.md` | ✅ 2026-04-09 |
-| Fase 7 — W6 Riesgos y pipeline | `riesgos.md` | ⏳ pendiente |
+| Fase 7 — W6 Riesgos y pipeline | `riesgos.md` | ✅ 2026-04-09 |
+| Fase 8 — Consolidación y README | `README.md` | ⏳ pendiente |
 
 ---
 
